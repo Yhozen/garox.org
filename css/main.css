@@ -11,5 +11,11 @@
 .ownWell {
   margin: 10px auto;
   padding: 25px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #576b7e;
+}
+body {
+    background-image: url('http://css-tricks.com/examples/FullPageBackgroundImage/images/bg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
