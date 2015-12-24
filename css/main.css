@@ -7,7 +7,9 @@
  .jumbotron {
    margin: 20px auto;
  }
-
+.norMargin  {
+  margin: 10px auto;
+}
 .ownWell {
   margin: 20px auto;
   padding: 25px;
@@ -22,9 +24,15 @@ body {
 a:hover>div {
   background-color: rgba(0, 0, 0, 0.3);
 }
+a:active>div {
+  background-color: rgba(0, 0, 0, 0.6);
+}
 a:hover {
   text-decoration: none;
 }
 .item {
   padding: 7px 20px 30px;
+}
+.dengo {
+  background-color: #E74C3C !important;
 }
