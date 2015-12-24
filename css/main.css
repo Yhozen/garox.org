@@ -9,13 +9,22 @@
  }
 
 .ownWell {
-  margin: 10px auto;
+  margin: 20px auto;
   padding: 25px;
   background-color: #576b7e;
 }
 body {
-    background-image: url('http://css-tricks.com/examples/FullPageBackgroundImage/images/bg.jpg');
+    background-image: url('http://paper4pc.com/images/green-mountains-wallpaper-12.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+}
+a:hover>div {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+a:hover {
+  text-decoration: none;
+}
+.item {
+  padding: 7px 20px 30px;
 }
