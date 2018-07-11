@@ -5,6 +5,8 @@ import Helmet from 'react-helmet'
 import Header from '../components/header'
 import './index.css'
 
+//    <Header siteTitle={data.site.siteMetadata.title} />
+
 const Layout = ({ children, data }) => (
   <div>
     <Helmet
@@ -13,8 +15,10 @@ const Layout = ({ children, data }) => (
         { name: 'description', content: 'Sample' },
         { name: 'keywords', content: 'sample, something' },
       ]}
+      link={[
+        {rel:"stylesheet", href:"https://fonts.googleapis.com/css?family=Roboto:300,400,500"}
+      ]}
     />
-    <Header siteTitle={data.site.siteMetadata.title} />
     <div
       style={{
         margin: '0 auto',
