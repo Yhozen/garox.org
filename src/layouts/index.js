@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import Header from '../components/header'
 import './index.css'
@@ -19,6 +20,7 @@ const Layout = ({ children, data }) => (
         {rel:"stylesheet", href:"https://fonts.googleapis.com/css?family=Roboto:300,400,500"}
       ]}
     />
+    <CssBaseline />
     <div
       style={{
         margin: '0 auto',

@@ -6,30 +6,43 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 
-const IndexPage = () => (
-  <div>
-      <Button variant="contained" color="primary">
-      Hello World
-    </Button>
-    <Grid container spacing={16}>
-      <Grid item xs={12}>
-        <Grid container justify="center">
-          {[0, 1, 2].map(value => (
-            <Grid key={value} item>
-              <Paper elevation={1}>
-              <Typography variant="headline" component="h3">
-                This is a sheet of paper.
-              </Typography>
-              <Typography component="p">
-                Paper can be used to build surface or other elements for your application.
-              </Typography>
-              </Paper>
-            </Grid>
-          ))}
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+});
+
+const IndexPage = (props) => {
+  const { classes } = props
+
+  return (
+    <div>
+      <Grid container justify="center" direction='column' >
+        <Grid item xs={12}>
+          <Grid container spacing={24} justify="center">
+            {[0, 1, 2].map(value => (
+              <Grid key={value} item xs={4}>
+                <Paper className={classes.paper} elevation={2}>
+                <Typography variant="headline" component="h3">
+                  This is a sheet of paper.
+                </Typography>
+                <Typography component="p">
+                  Paper can be used to build surface or other elements for your application.
+                </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
-  </div>
-)
+    </div>
+  )
+}
 
-export default IndexPage
+
+export default withStyles(styles)(IndexPage)
