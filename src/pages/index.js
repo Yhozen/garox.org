@@ -1,13 +1,16 @@
 import React from 'react'
 import Link from 'gatsby-link'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import green from '@material-ui/core/colors/green'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Dayjs from 'dayjs'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const styles = theme => ({
   root: {
@@ -23,9 +26,20 @@ const styles = theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-});
+    paddingTop: '85%',
+  }
+})
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: green[500]
+    }
+  }
+})
+const now = Dayjs()
+const nacimiento = Dayjs('1998-07-28')
+const años = now.diff(nacimiento, 'years', true)
+console.log(green[400])
 
 const Me = (props) => {
   const { classes } = props
@@ -33,17 +47,24 @@ const Me = (props) => {
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/contemplative-reptile.jpg"
+        image="https://avatars1.githubusercontent.com/u/6902134"
         title="Contemplative Reptile"
       />
       <CardContent>
-        <Typography gutterBottom variant="headline" component="h2">
-          Lizard
+        <Typography variant="headline" component="h2">
+          Gabriel Pérez
         </Typography>
+        <Typography gutterBottom variant="subheading" component="h5">
+          {años | 0} years old
+        </Typography>
+        <MuiThemeProvider theme={theme}>
+          <LinearProgress variant="determinate" value={(años % 1)*100 } style={{marginBottom: '1em'}}/>
+        </MuiThemeProvider>
         <Typography component="p">
-          Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-          across all continents except Antarctica
+          A programmer orem ipsum
+ dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
         </Typography>
+        
       </CardContent>
     </Card>
   )
@@ -65,8 +86,7 @@ const IndexPage = (props) => {
                 This is a sheet of paper.
               </Typography>
               <Typography component="p">
-                Paper can be used to build surface or other elements for your application.
-              </Typography>
+              Lorem ipsum. At vero eos et accusam et justo duo dolores et ea rebum.              </Typography>
               </Paper>
             </Grid>
           ))}

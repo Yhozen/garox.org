@@ -3,18 +3,15 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
-import Header from '../components/header'
 import './index.css'
-
-//    <Header siteTitle={data.site.siteMetadata.title} />
 
 const Layout = ({ children, data }) => (
   <div>
     <Helmet
       title={data.site.siteMetadata.title}
       meta={[
-        { name: 'description', content: 'Sample' },
-        { name: 'keywords', content: 'sample, something' },
+        { name: 'description', content: 'Official garox portfolio' },
+        { name: 'keywords', content: 'developer, garox, yhozen, js, javascript' },
       ]}
       link={[
         {rel:"stylesheet", href:"https://fonts.googleapis.com/css?family=Roboto:300,400,500"}
