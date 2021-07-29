@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import Link from 'gatsby-link'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import green from '@material-ui/core/colors/green'
 import Typography from '@material-ui/core/Typography'
