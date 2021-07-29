@@ -20,8 +20,7 @@ const nacimiento = Dayjs('1998-07-28')
 
 const Me = (props) => {
   const { classes } = props
-  const now = useMemo(() => Dayjs(), [])
-  const años = useMemo(() => now.diff(nacimiento, 'years', true), [now])
+  const age = useMemo(() => Dayjs().diff(nacimiento, 'years', true), [])
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -34,12 +33,12 @@ const Me = (props) => {
           Gabriel Pérez
         </Typography>
         <Typography gutterBottom variant="subheading" component="h5">
-          {años | 0} years old
+          {age | 0} years old
         </Typography>
         <MuiThemeProvider theme={theme}>
           <LinearProgress
             variant="determinate"
-            value={(años % 1) * 100}
+            value={(age % 1) * 100}
             style={{ marginBottom: '1em' }}
           />
         </MuiThemeProvider>
