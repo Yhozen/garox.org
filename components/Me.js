@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import green from '@material-ui/core/colors/green'
 import Typography from '@material-ui/core/Typography'
@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Dayjs from 'dayjs'
+import dayjs from 'dayjs'
 
 const theme = createMuiTheme({
   palette: {
@@ -16,11 +16,11 @@ const theme = createMuiTheme({
   },
 })
 
-const nacimiento = Dayjs('1998-07-28')
+const DATE_OF_BIRTHDAY = dayjs('1998-07-28')
 
 const Me = (props) => {
   const { classes } = props
-  const age = useMemo(() => Dayjs().diff(nacimiento, 'years', true), [])
+  const age = useMemo(() => dayjs().diff(DATE_OF_BIRTHDAY, 'years', true), [])
   return (
     <Card className={classes.card}>
       <CardMedia
