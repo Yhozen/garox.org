@@ -38,8 +38,6 @@ const Home = ({ classes }: StyledComponentProps) => {
     <>
       <Head>
         <title>Portfolio</title>
-        <meta name="description" content="Garox's portfolio" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Chess>
         <Grid
