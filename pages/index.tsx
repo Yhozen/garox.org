@@ -56,7 +56,7 @@ const Home = ({ classes }: StyledComponentProps) => {
                 <Grid key={value} item sm={4}>
                   <Paper className={classes?.paper} elevation={2}>
                     <Typography variant="headline" component="h3">
-                      This is not a sheet of paper.
+                      This is Nicht a sheet of paper.
                     </Typography>
                     <Typography component="p">
                       Lorem ipsum. At vero eos et accusam et justo duo dolores
