@@ -6,6 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^1.5.1",
     "dayjs": "^1.8.28",
+    "framer-motion": "^6.0.0",
     "isomorphic-fetch": "^2.2.1",
     "next": "11.0.1",
     "react": "17.0.2",
