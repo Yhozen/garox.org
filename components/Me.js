@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import green from '@material-ui/core/colors/green'
-import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
+import green from '@material-ui/core/colors/green'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import dayjs from 'dayjs'
 
 const theme = createMuiTheme({
@@ -18,15 +18,16 @@ const theme = createMuiTheme({
 
 const DATE_OF_BIRTHDAY = dayjs('1998-07-28')
 
-const Me = (props) => {
+const Me = props => {
   const { classes } = props
   const age = useMemo(() => dayjs().diff(DATE_OF_BIRTHDAY, 'years', true), [])
+
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
         image="https://avatars1.githubusercontent.com/u/6902134"
-        title="Contemplative Reptile"
+        title="Garox"
       />
       <CardContent>
         <Typography variant="headline" component="h2">

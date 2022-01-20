@@ -27,8 +27,6 @@ const materialStyles = (theme: any) => ({
 })
 
 const Chess = styled.div`
-  min-width: 100vw;
-  min-height: 100vh;
   width: 100%;
   height: 100%;
   background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% /
@@ -49,7 +47,9 @@ const Home = ({ classes }: StyledComponentProps) => {
           direction="column"
           style={{ padding: 20 }}>
           <Grid item xs={12}>
-            <Me classes={classes} />
+            <motion.div drag dragMomentum={false}>
+              <Me classes={classes} />
+            </motion.div>
           </Grid>
           <Grid item xs={12} style={{ padding: 20 }}>
             <Grid container spacing={24} justify="center">

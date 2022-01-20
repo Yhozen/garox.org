@@ -6,6 +6,8 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% /
     4px 4px;
+  height: 100%;
+  width: 100%;
 }
 
 a {
