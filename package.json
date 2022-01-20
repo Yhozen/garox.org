@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-default",
-  "description": "Gatsby default starter",
+  "name": "garox-portfolio",
+  "description": "Garox portolio",
   "version": "1.0.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Gabriel Pérez <garox.eth@@ethmail.cc>",
   "dependencies": {
     "@material-ui/core": "^1.5.1",
     "dayjs": "^1.8.28",
@@ -16,7 +16,7 @@
     "swr": "^1.1.2"
   },
   "keywords": [
-    "gatsby"
+    "portfolio"
   ],
   "license": "MIT",
   "scripts": {
@@ -49,6 +49,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/Yhozen/Yhozen.github.io"
   }
 }
