@@ -32,7 +32,7 @@ const Chess = styled.div`
   width: 100%;
   height: 100%;
   background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% /
-    4px 4px;
+    0.25rem 0.25rem;
 `
 
 const Home = ({ classes }: StyledComponentProps) => {
