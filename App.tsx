@@ -1,7 +1,7 @@
 import Me from './components/introduction'
-import { Icon } from './components/Icon'
+import { Icon } from './components/icon'
 import { IconProps } from './types/IconProps'
-import { Sheet } from './components/Sheet'
+import { Sheet } from './components/sheet'
 
 type App = {
   id: string
@@ -14,4 +14,5 @@ export const Apps: App[] = [
   { id: `sheet-0`, Component: Sheet, icon: Icon },
   { id: `sheet-1`, Component: Sheet, icon: Icon },
   { id: `sheet-2`, Component: Sheet, icon: Icon },
+  { id: `spotify`, Component: Sheet, icon: Icon },
 ]
