@@ -49,11 +49,7 @@ const Me = () => {
         <h2>Gabriel Pérez</h2>
         <h5>{age | 0} years old</h5>
         <div>
-          <Progress
-            value={(age % 1) * 100}
-            max={100}
-            animate={{ value: (age % 1) * 100 }}
-          />
+          <Progress value={(age % 1) * 100} max={100} />
         </div>
         <p>
           A programmer orem ipsum dolor sit amet, consetetur sadipscing elitr,
