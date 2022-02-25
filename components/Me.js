@@ -2,20 +2,17 @@ import { useMemo } from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
-import green from '@material-ui/core/colors/green'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import dayjs from 'dayjs'
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: green[500],
-    },
-  },
-})
+import { motion } from 'framer-motion'
+import Progress2 from 'https://framer.com/m/Progress-aSAM.js@XZn0bOO53MVEePYoGtKu'
+import styled from 'styled-components'
 
 const DATE_OF_BIRTHDAY = dayjs('1998-07-28')
+
+const Progress = styled(motion.progress)`
+  margin-bottom: 1em;
+  width: 100%;
+`
 
 const Me = props => {
   const { classes } = props
@@ -31,13 +28,14 @@ const Me = props => {
       <CardContent>
         <h2>Gabriel Pérez</h2>
         <h5>{age | 0} years old</h5>
-        <MuiThemeProvider theme={theme}>
-          <LinearProgress
-            variant="determinate"
-            value={(age % 1) * 100}
-            style={{ marginBottom: '1em' }}
+        <div>
+          <Progress
+            initial={{ value: 0 }}
+            max={100}
+            animate={{ value: (age % 1) * 100 }}
           />
-        </MuiThemeProvider>
+          <Progress2 />
+        </div>
         <p>
           A programmer orem ipsum dolor sit amet, consetetur sadipscing elitr,
           sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
