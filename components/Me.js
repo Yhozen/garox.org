@@ -4,6 +4,7 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
+import Hallo from 'https://framer.com/m/Hallo-QOj2.js@QQ928jvrcmQaKokTNE4z'
 import Progress2 from 'https://framer.com/m/Progress-aSAM.js@XZn0bOO53MVEePYoGtKu'
 import styled from 'styled-components'
 
@@ -25,6 +26,7 @@ const Me = props => {
         image="https://avatars1.githubusercontent.com/u/6902134"
         title="Garox"
       />
+      <Hallo />
       <CardContent>
         <h2>Gabriel Pérez</h2>
         <h5>{age | 0} years old</h5>
