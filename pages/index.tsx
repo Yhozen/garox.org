@@ -1,10 +1,10 @@
 import Head from 'next/head'
-import { useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import Me from '../components/introduction'
 import { Window } from '../components/window'
 import { useStore } from '../state/windows'
+import { Apps } from '../App'
 
 const Chess = styled.div`
   min-width: 99vw;
@@ -17,13 +17,6 @@ const Chess = styled.div`
   max-height: 100vh;
   background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% /
     0.25rem 0.25rem;
-`
-
-const Paper = styled.div`
-  width: 10rem;
-  background: white;
-  padding: 0.4rem;
-  border-radius: 0.3rem;
 `
 
 const Home = () => {
@@ -40,25 +33,16 @@ const Home = () => {
         <title>Portfolio</title>
       </Head>
       <Chess ref={containerRef}>
-        <Window id="me">
-          <Me />
-        </Window>
-
-        <button onClick={() => setWindows('me', { isOpen: true })}>open</button>
-
-        <div>
-          {[0, 1, 2].map(value => (
-            <Window key={value} id={`sheet-${value}`}>
-              <Paper>
-                <h3>This is Nicht ae sheet of paper.</h3>
-                <p>
-                  Lorem ipsum. At vero eos et accusam et justo duo dolores et ea
-                  rebum.
-                </p>
-              </Paper>
+        {Apps.map(({ id, Component, icon }) => (
+          <Fragment key={id}>
+            <div onClick={() => setWindows(id, { isOpen: true })}>
+              {icon({ id })}
+            </div>
+            <Window id={id}>
+              <Component />
             </Window>
-          ))}
-        </div>
+          </Fragment>
+        ))}
       </Chess>
     </>
   )
