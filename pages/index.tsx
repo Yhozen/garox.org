@@ -45,9 +45,6 @@ const Home = () => {
         </Window>
 
         <button onClick={() => setWindows('me', { isOpen: true })}>open</button>
-        <button onClick={() => setWindows('me', { isOpen: false })}>
-          close
-        </button>
 
         <div>
           {[0, 1, 2].map(value => (
