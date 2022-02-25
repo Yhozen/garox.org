@@ -5,7 +5,6 @@ import CardMedia from '@material-ui/core/CardMedia'
 import green from '@material-ui/core/colors/green'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 import dayjs from 'dayjs'
 
 const theme = createMuiTheme({
@@ -30,12 +29,8 @@ const Me = props => {
         title="Garox"
       />
       <CardContent>
-        <Typography variant="headline" component="h2">
-          Gabriel Pérez
-        </Typography>
-        <Typography gutterBottom variant="subheading" component="h5">
-          {age | 0} years old
-        </Typography>
+        <h2>Gabriel Pérez</h2>
+        <h5>{age | 0} years old</h5>
         <MuiThemeProvider theme={theme}>
           <LinearProgress
             variant="determinate"
@@ -43,12 +38,12 @@ const Me = props => {
             style={{ marginBottom: '1em' }}
           />
         </MuiThemeProvider>
-        <Typography component="p">
+        <p>
           A programmer orem ipsum dolor sit amet, consetetur sadipscing elitr,
           sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
           aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
           dolores et ea rebum.
-        </Typography>
+        </p>
       </CardContent>
     </Card>
   )
