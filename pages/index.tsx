@@ -1,8 +1,7 @@
-import { motion } from 'framer-motion'
 import Head from 'next/head'
 import styled from 'styled-components'
 
-import Me from '../components/me'
+import Me from '../components/introduction'
 import { Window } from '../components/window'
 import { useStore } from '../state/windows'
 
