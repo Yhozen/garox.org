@@ -13,7 +13,7 @@ const Progress = styled(motion.progress)`
 const Card = styled.div`
   display: block;
   background: white;
-  border-radius: 0.32rem;
+  border-radius: 0.3rem;
   width: 20rem;
 `
 
