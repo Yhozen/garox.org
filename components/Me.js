@@ -1,53 +1,47 @@
 import { useMemo } from 'react'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import green from '@material-ui/core/colors/green'
-import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import dayjs from 'dayjs'
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: green[500],
-    },
-  },
-})
+import { motion } from 'framer-motion'
+import Progress2 from 'https://framer.com/m/Progress-aSAM.js@XZn0bOO53MVEePYoGtKu'
+import styled from 'styled-components'
 
 const DATE_OF_BIRTHDAY = dayjs('1998-07-28')
 
-const Me = (props) => {
+const Progress = styled(motion.progress)`
+  margin-bottom: 1em;
+  width: 100%;
+`
+
+const Me = props => {
   const { classes } = props
   const age = useMemo(() => dayjs().diff(DATE_OF_BIRTHDAY, 'years', true), [])
+
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
         image="https://avatars1.githubusercontent.com/u/6902134"
-        title="Contemplative Reptile"
+        title="Garox"
       />
       <CardContent>
-        <Typography variant="headline" component="h2">
-          Gabriel Pérez
-        </Typography>
-        <Typography gutterBottom variant="subheading" component="h5">
-          {age | 0} years old
-        </Typography>
-        <MuiThemeProvider theme={theme}>
-          <LinearProgress
-            variant="determinate"
-            value={(age % 1) * 100}
-            style={{ marginBottom: '1em' }}
+        <h2>Gabriel Pérez</h2>
+        <h5>{age | 0} years old</h5>
+        <div style={{ background: 'red' }}>
+          <Progress
+            initial={{ value: 0 }}
+            max={100}
+            animate={{ value: (age % 1) * 100 }}
           />
-        </MuiThemeProvider>
-        <Typography component="p">
+          <Progress2 />
+        </div>
+        <p>
           A programmer orem ipsum dolor sit amet, consetetur sadipscing elitr,
           sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
           aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
           dolores et ea rebum.
-        </Typography>
+        </p>
       </CardContent>
     </Card>
   )

@@ -1,21 +1,23 @@
 {
-  "name": "gatsby-starter-default",
-  "description": "Gatsby default starter",
+  "name": "garox-portfolio",
+  "description": "Garox portolio",
   "version": "1.0.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Gabriel Pérez <garox.eth@@ethmail.cc>",
   "dependencies": {
     "@material-ui/core": "^1.5.1",
     "dayjs": "^1.8.28",
-    "framer-motion": "^6.0.0",
     "isomorphic-fetch": "^2.2.1",
+    "framer": "^2.0.0-beta.13",
+    "framer-motion": "^5.5.6",
     "next": "^12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-helmet": "^6.0.0",
-    "styled-components": "^5.3.0"
+    "styled-components": "^5.3.0",
+    "swr": "^1.1.2"
   },
   "keywords": [
-    "gatsby"
+    "portfolio"
   ],
   "license": "MIT",
   "scripts": {
@@ -32,22 +34,24 @@
     "@types/react": "17.0.15",
     "@types/react-helmet": "^6.0.0",
     "@types/styled-components": "^5.1.11",
-    "eslint": "^7.2.0",
+    "eslint": "^8.6.0",
     "eslint-config-next": "^11.0.1",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-config-rokket-labs": "^0.1.4",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-react-hooks": "^4.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-rokket-labs": "0.4.11",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-native": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "gh-pages": "^1.2.0",
-    "prettier": "2.0.5",
+    "prettier": "^2.5.1",
+    "prettier-eslint": "^13.0.0",
     "typescript": "4.3.5"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/Yhozen/Yhozen.github.io"
   },
   "resolutions": {
     "styled-components": "^5"

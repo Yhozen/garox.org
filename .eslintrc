@@ -1,8 +1,3 @@
 {
-  "extends": ["next", "next/core-web-vitals"],
-  "settings": {
-    "import/resolver": {
-      "alias": [["@src", "./src"]]
-    }
-  }
+  "extends": ["rokket-labs", "next"]
 }
