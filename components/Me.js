@@ -27,9 +27,9 @@ const Me = props => {
       <CardContent>
         <h2>Gabriel Pérez</h2>
         <h5>{age | 0} years old</h5>
-        <div style={{ background: 'red' }}>
+        <div>
           <Progress
-            initial={{ value: 0 }}
+            value={(age % 1) * 100}
             max={100}
             animate={{ value: (age % 1) * 100 }}
           />
