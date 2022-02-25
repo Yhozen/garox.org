@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { StyledComponentProps, withStyles } from '@material-ui/core/styles'
@@ -45,29 +46,25 @@ const Home = ({ classes }: StyledComponentProps) => {
         <title>Portfolio</title>
       </Head>
       <Chess>
-        <Grid item xs={12}>
-          <motion.div drag dragMomentum={false}>
-            <Me classes={classes} />
-          </motion.div>
-        </Grid>
-        <Grid item xs={12} style={{ padding: 20 }}>
-          <Grid container spacing={24} justify="center">
-            {[0, 1, 2].map(value => (
-              <motion.div key={value} drag dragMomentum={false}>
-                <Grid item sm={4}>
-                  <Paper className={classes?.paper} elevation={2}>
-                    <h3>This is Nicht a sheet of paper.</h3>
-                    <p>
-                      Lorem ipsum. At vero eos et accusam et justo duo dolores
-                      et ea rebum.
-                    </p>
-                  </Paper>
-                </Grid>
-              </motion.div>
-            ))}
-            <Window />
-          </Grid>
-        </Grid>
+        <motion.div drag dragMomentum={false}>
+          <Me />
+        </motion.div>
+        <div>
+          {[0, 1, 2].map(value => (
+            <motion.div key={value} drag dragMomentum={false}>
+              <Grid item sm={4}>
+                <Paper className={classes?.paper} elevation={2}>
+                  <h3>This is Nicht a sheet of paper.</h3>
+                  <p>
+                    Lorem ipsum. At vero eos et accusam et justo duo dolores et
+                    ea rebum.
+                  </p>
+                </Paper>
+              </Grid>
+            </motion.div>
+          ))}
+        </div>
+        <Window />
       </Chess>
     </>
   )

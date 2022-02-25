@@ -1,7 +1,4 @@
 import { useMemo } from 'react'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
 import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
@@ -13,14 +10,38 @@ const Progress = styled(motion.progress)`
   width: 100%;
 `
 
-const Me = props => {
-  const { classes } = props
+const Card = styled.div`
+  display: block;
+  background: white;
+  border-radius: 0.3rem;
+  width: 20rem;
+`
+
+const CardContent = styled.div`
+  display: block;
+  padding: 0.7rem;
+`
+
+type CardMediaProps = {
+  image: string
+}
+
+const CardMedia = styled.div<CardMediaProps>`
+  display: block;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 0.3rem 0.3rem 0 0;
+  background-image: url(${({ image }) => image});
+  height: 20rem;
+`
+
+const Me = () => {
   const age = useMemo(() => dayjs().diff(DATE_OF_BIRTH, 'years', true), [])
 
   return (
-    <Card className={classes.card}>
+    <Card>
       <CardMedia
-        className={classes.media}
         image="https://avatars1.githubusercontent.com/u/6902134"
         title="Garox"
       />
