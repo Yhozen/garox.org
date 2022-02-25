@@ -7,6 +7,7 @@ module.exports = {
       'https://ga.jspm.io/',
       'https://jspm.dev/',
       'https://fonts.gstatic.com/',
+      'https://framerusercontent.com/modules/',
     ],
   },
 }
