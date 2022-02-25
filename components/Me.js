@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import Progress2 from 'https://framer.com/m/Progress-aSAM.js@XZn0bOO53MVEePYoGtKu'
 import styled from 'styled-components'
 
-const DATE_OF_BIRTHDAY = dayjs('1998-07-28')
+const DATE_OF_BIRTH = dayjs('1998-07-28')
 
 const Progress = styled(motion.progress)`
   margin-bottom: 1em;
@@ -16,7 +16,7 @@ const Progress = styled(motion.progress)`
 
 const Me = props => {
   const { classes } = props
-  const age = useMemo(() => dayjs().diff(DATE_OF_BIRTHDAY, 'years', true), [])
+  const age = useMemo(() => dayjs().diff(DATE_OF_BIRTH, 'years', true), [])
 
   return (
     <Card className={classes.card}>
