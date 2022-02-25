@@ -1,5 +1,5 @@
 import Me from './components/introduction'
-import { Icon } from './components/icon'
+import { Icon } from './components/icon-base'
 import { IconProps } from './types/IconProps'
 import { Sheet } from './components/sheet'
 import { Spotify } from './components/spotify'
