@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import Me from '../components/introduction'
@@ -8,6 +9,7 @@ import { useStore } from '../state/windows'
 const Chess = styled.div`
   min-width: 99vw;
   min-height: 99vh;
+  overflow: hidden;
 
   width: 100%;
   height: 100%;
@@ -25,13 +27,19 @@ const Paper = styled.div`
 `
 
 const Home = () => {
-  const { setWindows } = useStore()
+  const { setWindows, constrainRef, setConstrainRef } = useStore()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setConstrainRef(containerRef)
+  }, [constrainRef])
+
   return (
     <>
       <Head>
         <title>Portfolio</title>
       </Head>
-      <Chess>
+      <Chess ref={containerRef}>
         <Window id="me">
           <Me />
         </Window>

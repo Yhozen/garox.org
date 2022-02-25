@@ -1,3 +1,4 @@
+import { RefObject } from 'react'
 import create from 'zustand'
 
 type WindowView = {
@@ -10,6 +11,8 @@ type WindowView = {
 type WindowsViewState = {
   windows: Record<string, WindowView>
   setWindows: (id: string, properties: Partial<WindowView>) => void
+  constrainRef: RefObject<Element> | null
+  setConstrainRef: (ref: RefObject<Element>) => void
 }
 
 const INITIAL_WINDOWS: Record<string, WindowView> = {
@@ -18,6 +21,8 @@ const INITIAL_WINDOWS: Record<string, WindowView> = {
 
 export const useStore = create<WindowsViewState>(set => ({
   windows: INITIAL_WINDOWS,
+  constrainRef: null,
+  setConstrainRef: constrainRef => set(() => ({ constrainRef })),
   setWindows: (id, properties) =>
     set(state => ({
       windows: {
@@ -28,5 +33,7 @@ export const useStore = create<WindowsViewState>(set => ({
 }))
 
 const windowsSelector = (state: WindowsViewState) => state.windows
+const constrainRefSelector = (state: WindowsViewState) => state.constrainRef
 
 export const useWindows = () => useStore(windowsSelector)
+export const useConstrainRef = () => useStore(constrainRefSelector)

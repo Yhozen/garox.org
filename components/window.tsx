@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { motion } from 'framer-motion'
-import { useWindows } from '../state/windows'
+import { useConstrainRef, useWindows } from '../state/windows'
 import styled from 'styled-components'
 
 const variants = {
@@ -18,10 +18,16 @@ const WindowContainer = styled(motion.div)`
 
 export const Window: FC<WindowProps> = ({ id, children }) => {
   const windows = useWindows()
+  const constrainRef = useConstrainRef()
+
+  const optional = constrainRef ? { dragConstraints: constrainRef } : {}
+
+  console.log(optional)
 
   return (
     <WindowContainer
       drag
+      {...optional}
       dragMomentum={false}
       animate={windows[id]?.isOpen ? 'open' : 'closed'}
       transition={{ ease: 'easeInOut' }}
