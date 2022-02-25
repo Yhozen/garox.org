@@ -4,8 +4,6 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
-import Hallo from 'https://framer.com/m/Hallo-QOj2.js@QQ928jvrcmQaKokTNE4z'
-import Progress2 from 'https://framer.com/m/Progress-aSAM.js@XZn0bOO53MVEePYoGtKu'
 import styled from 'styled-components'
 
 const DATE_OF_BIRTH = dayjs('1998-07-28')
@@ -26,7 +24,6 @@ const Me = props => {
         image="https://avatars1.githubusercontent.com/u/6902134"
         title="Garox"
       />
-      <Hallo />
       <CardContent>
         <h2>Gabriel Pérez</h2>
         <h5>{age | 0} years old</h5>
@@ -36,7 +33,6 @@ const Me = props => {
             max={100}
             animate={{ value: (age % 1) * 100 }}
           />
-          <Progress2 />
         </div>
         <p>
           A programmer orem ipsum dolor sit amet, consetetur sadipscing elitr,
