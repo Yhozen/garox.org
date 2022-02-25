@@ -1,18 +1,32 @@
-import { useState } from 'react'
+import type { FC } from 'react'
 import { motion } from 'framer-motion'
+import { useWindows } from '../state/windows'
+import styled from 'styled-components'
 
 const variants = {
-  open: { opacity: 1, x: 0 },
-  closed: { opacity: 0, x: '-100%' },
+  open: { opacity: 1, x: 0, scale: 1, height: 500, width: 500 },
+  closed: { opacity: 0, x: '-100%', scale: 0.1, height: 50, width: 50 },
 }
 
-export const Window = () => {
-  const [isOpen, setIsOpen] = useState(true)
+type WindowProps = {
+  id: string
+}
+
+const WindowContainer = styled(motion.div)`
+  position: absolute;
+`
+
+export const Window: FC<WindowProps> = ({ id, children }) => {
+  const windows = useWindows()
 
   return (
-    <motion.div animate={isOpen ? 'open' : 'closed'} variants={variants}>
-      <button onClick={() => setIsOpen(isOpen => !isOpen)}>aa</button>
-      ss
-    </motion.div>
+    <WindowContainer
+      drag
+      dragMomentum={false}
+      animate={windows[id]?.isOpen ? 'open' : 'closed'}
+      transition={{ ease: 'easeInOut' }}
+      variants={variants}>
+      {children}
+    </WindowContainer>
   )
 }

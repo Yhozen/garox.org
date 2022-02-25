@@ -2,8 +2,9 @@ import { motion } from 'framer-motion'
 import Head from 'next/head'
 import styled from 'styled-components'
 
-import Me from '../components/Me'
+import Me from '../components/me'
 import { Window } from '../components/window'
+import { useStore } from '../state/windows'
 
 const Chess = styled.div`
   min-width: 99vw;
@@ -25,29 +26,35 @@ const Paper = styled.div`
 `
 
 const Home = () => {
+  const { setWindows } = useStore()
   return (
     <>
       <Head>
         <title>Portfolio</title>
       </Head>
       <Chess>
-        <motion.div drag dragMomentum={false}>
+        <Window id="me">
           <Me />
-        </motion.div>
+        </Window>
+
+        <button onClick={() => setWindows('me', { isOpen: true })}>open</button>
+        <button onClick={() => setWindows('me', { isOpen: false })}>
+          close
+        </button>
+
         <div>
           {[0, 1, 2].map(value => (
-            <motion.div key={value} drag dragMomentum={false}>
+            <Window key={value} id={`sheet-${value}`}>
               <Paper>
-                <h3>This is Nicht a sheet of paper.</h3>
+                <h3>This is Nicht ae sheet of paper.</h3>
                 <p>
                   Lorem ipsum. At vero eos et accusam et justo duo dolores et ea
                   rebum.
                 </p>
               </Paper>
-            </motion.div>
+            </Window>
           ))}
         </div>
-        <Window />
       </Chess>
     </>
   )
