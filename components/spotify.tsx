@@ -2,23 +2,19 @@ import { FC } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 
-const url = `/api/hello`
+const url = process.env.IS_NEXT_EXPORT
+  ? `${process.env.API_URL}/api/now-playing-plain`
+  : `/api/hello`
 
-const fetcher = (url: string) => fetch(url).then(response => response.json())
+const fetcher = (url: string) =>
+  fetch(url, { mode: process.env.IS_NEXT_EXPORT ? 'cors' : 'no-cors' }).then(
+    response => response.json(),
+  )
 
 const SpotifyContainer = styled.div`
   background: white;
   padding: 2rem;
 `
-
-const Example = {
-  cover: 'https://i.scdn.co/image/ab67616d00004851171f7a0b1f8076e6d9aaf6b7',
-  artist: 'Stone Temple Pilots',
-  track: 'Plush',
-  isPlaying: true,
-  progress: 162707,
-  duration: 310346,
-}
 
 type SpotifyData = {
   cover: string
