@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Window } from '../components/window'
 import { useStore } from '../state/windows'
 import { Apps } from '../App'
+import { Icon } from '../components/icon-base'
 
 const Chess = styled.div`
   min-width: 99vw;
@@ -36,7 +37,7 @@ const Home = () => {
         {Apps.map(({ id, Component, icon }) => (
           <Fragment key={id}>
             <div onClick={() => setWindows(id, { isOpen: true })}>
-              {icon({ id })}
+              <Icon id={id}>{icon({ id })}</Icon>
             </div>
             <Window id={id}>
               <Component />

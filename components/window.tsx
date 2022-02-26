@@ -4,7 +4,7 @@ import { useConstrainRef, useSetWindows, useWindows } from '../state/windows'
 import styled from 'styled-components'
 
 const variants = {
-  open: { opacity: 1, x: '50%', scale: 1, height: 500, width: 500 },
+  open: { opacity: 1, x: 200, scale: 1, height: 500, width: 500 },
   closed: { opacity: 0, x: '-100%', scale: 0.1, height: 50, width: 50 },
 }
 
@@ -23,8 +23,6 @@ export const Window: FC<WindowProps> = ({ id, children }) => {
   const setWindows = useSetWindows()
 
   const optional = constrainRef ? { dragConstraints: constrainRef } : {}
-
-  console.log(optional)
 
   return (
     <WindowContainer
