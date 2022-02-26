@@ -1,8 +1,8 @@
 import Me from './components/introduction'
-import { Icon } from './components/icon-base'
 import { IconProps } from './types/IconProps'
 import { Sheet } from './components/sheet'
 import { Spotify } from './components/spotify'
+import { SpotifyComponent } from './components/spotify.icon'
 
 type App = {
   id: string
@@ -11,9 +11,9 @@ type App = {
 }
 
 export const Apps: App[] = [
-  { id: 'me', Component: Me, icon: Icon },
-  { id: `sheet-0`, Component: Sheet, icon: Icon },
-  { id: `sheet-1`, Component: Sheet, icon: Icon },
-  { id: `sheet-2`, Component: Sheet, icon: Icon },
-  { id: `spotify`, Component: Spotify, icon: Icon },
+  { id: 'me', Component: Me, icon: SpotifyComponent },
+  { id: `sheet-0`, Component: Sheet, icon: SpotifyComponent },
+  { id: `sheet-1`, Component: Sheet, icon: SpotifyComponent },
+  { id: `sheet-2`, Component: Sheet, icon: SpotifyComponent },
+  { id: `spotify`, Component: Spotify, icon: SpotifyComponent },
 ]
