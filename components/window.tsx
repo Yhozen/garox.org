@@ -22,6 +22,8 @@ export const Window: FC<WindowProps> = ({ id, children }) => {
   const constrainRef = useConstrainRef()
   const setWindows = useSetWindows()
 
+  const isOpen = windows[id]?.isOpen
+
   const optional = constrainRef ? { dragConstraints: constrainRef } : {}
 
   return (
@@ -29,11 +31,17 @@ export const Window: FC<WindowProps> = ({ id, children }) => {
       drag
       {...optional}
       dragMomentum={false}
-      animate={windows[id]?.isOpen ? 'open' : 'closed'}
+      animate={isOpen ? 'open' : 'closed'}
       transition={{ ease: 'easeInOut' }}
       variants={variants}>
-      <button onClick={() => setWindows(id, { isOpen: false })}>x</button>
-      {children}
+      {isOpen && (
+        <>
+          <motion.button onClick={() => setWindows(id, { isOpen: false })}>
+            x
+          </motion.button>
+          {children}
+        </>
+      )}
     </WindowContainer>
   )
 }
