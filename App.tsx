@@ -1,8 +1,10 @@
+import type { JSX } from 'react'
+
 import Me from './components/introduction'
-import { IconProps } from './types/IconProps'
 import { Sheet } from './components/sheet'
 import { Spotify } from './components/spotify'
 import { SpotifyComponent } from './components/spotify.icon'
+import { IconProps } from './types/IconProps'
 
 type App = {
   id: string
