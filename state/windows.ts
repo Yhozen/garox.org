@@ -1,5 +1,5 @@
 import { RefObject } from 'react'
-import create from 'zustand'
+import { create } from 'zustand'
 
 type WindowView = {
   id: string
@@ -37,5 +37,7 @@ const constrainRefSelector = (state: WindowsViewState) => state.constrainRef
 const setWindowsSelector = (state: WindowsViewState) => state.setWindows
 
 export const useWindows = () => useStore(windowsSelector)
+
 export const useConstrainRef = () => useStore(constrainRefSelector)
+
 export const useSetWindows = () => useStore(setWindowsSelector)
