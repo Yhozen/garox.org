@@ -1,11 +1,11 @@
-import Head from 'next/head'
 import { Fragment, useEffect, useRef } from 'react'
+import Head from 'next/head'
 import styled from 'styled-components'
 
-import { Window } from '../components/window'
-import { useStore } from '../state/windows'
 import { Apps } from '../App'
 import { Icon } from '../components/icon-base'
+import { Window } from '../components/window'
+import { useStore } from '../state/windows'
 
 const Chess = styled.div`
   min-width: 99vw;
@@ -26,7 +26,7 @@ const Home = () => {
 
   useEffect(() => {
     setConstrainRef(containerRef)
-  }, [constrainRef])
+  }, [constrainRef, setConstrainRef])
 
   return (
     <>

@@ -1,5 +1,6 @@
-import { FC } from 'react'
+import type { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
+
 import { IconProps } from '../types/IconProps'
 
 const AppContainer = styled.div`
@@ -22,7 +23,7 @@ const Code = styled.code`
   filter: drop-shadow(2px 1px 4px #eee);
 `
 
-export const Icon: FC<IconProps> = ({ id, children }) => {
+export const Icon: FC<PropsWithChildren<IconProps>> = ({ id, children }) => {
   return (
     <AppContainer>
       <IconContainer>{children}</IconContainer>

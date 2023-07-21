@@ -1,7 +1,8 @@
-import type { FC } from 'react'
+import type { FC, PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
-import { useConstrainRef, useSetWindows, useWindows } from '../state/windows'
 import styled from 'styled-components'
+
+import { useConstrainRef, useSetWindows, useWindows } from '../state/windows'
 
 const variants = {
   open: { opacity: 1, x: 200, scale: 1, height: 500, width: 500 },
@@ -17,7 +18,10 @@ const WindowContainer = styled(motion.div)`
   padding-top: 3rem;
 `
 
-export const Window: FC<WindowProps> = ({ id, children }) => {
+export const Window: FC<PropsWithChildren<WindowProps>> = ({
+  id,
+  children,
+}) => {
   const windows = useWindows()
   const constrainRef = useConstrainRef()
   const setWindows = useSetWindows()
