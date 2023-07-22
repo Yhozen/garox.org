@@ -8,8 +8,6 @@ import { Window } from '../components/window'
 import { useStore } from '../state/windows'
 
 const Chess = styled.div`
-  min-width: 99vw;
-  min-height: 99vh;
   overflow: hidden;
 
   width: 100%;
