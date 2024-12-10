@@ -1,52 +1,47 @@
-import type { FC, PropsWithChildren } from "react";
+"use client";
 import { motion } from "framer-motion";
-import styled from "styled-components";
 
-import { useConstrainRef, useSetWindows, useWindows } from "../state/windows";
-
-const variants = {
-  open: { opacity: 1, x: 200, scale: 1, height: 500, width: 500 },
-  closed: { opacity: 0, x: "-100%", scale: 0.1, height: 50, width: 50 },
-};
-
-type WindowProps = {
-  id: string;
-};
-
-const WindowContainer = styled(motion.div)`
-  position: absolute;
-  padding-top: 3rem;
-`;
-
-export const Window: FC<PropsWithChildren<WindowProps>> = ({
-  id,
+export const MacWindow = ({
+  title,
   children,
+  position,
+  zIndex,
+  onClose,
+  onFocus,
+  onDragEnd,
+}: {
+  title: string;
+  children: React.ReactNode;
+  position: { x: number; y: number };
+  zIndex: number;
+  onClose: () => void;
+  onFocus: () => void;
+  onDragEnd: (position: { x: number; y: number }) => void;
 }) => {
-  const windows = useWindows();
-  const constrainRef = useConstrainRef();
-  const setWindows = useSetWindows();
-
-  const isOpen = windows[id]?.isOpen;
-
-  const optional = constrainRef ? { dragConstraints: constrainRef } : {};
-
   return (
-    <WindowContainer
+    <motion.div
       drag
-      {...optional}
       dragMomentum={false}
-      animate={isOpen ? "open" : "closed"}
-      transition={{ ease: "easeInOut" }}
-      variants={variants}
+      initial={position}
+      onDragEnd={(_, info) => {
+        onDragEnd({
+          x: position.x + info.offset.x,
+          y: position.y + info.offset.y,
+        });
+      }}
+      className="bg-white border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] absolute"
+      style={{ width: "280px", zIndex }}
+      onMouseDown={onFocus}
     >
-      {isOpen && (
-        <>
-          <motion.button onClick={() => setWindows(id, { isOpen: false })}>
-            x
-          </motion.button>
-          {children}
-        </>
-      )}
-    </WindowContainer>
+      <div className="bg-white border-b-2 border-black px-2 py-1 flex justify-between items-center">
+        <button
+          onClick={onClose}
+          className="w-3 h-3 border border-black bg-white hover:bg-gray-600 active:bg-black"
+        />
+        <span className="text-sm font-chicago">{title}</span>
+        <div />
+      </div>
+      <div className="p-4 max-h-[400px] overflow-auto">{children}</div>
+    </motion.div>
   );
 };
