@@ -1,3 +1,3 @@
 {
-  "extends": ["rokket-labs", "next"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
 }
