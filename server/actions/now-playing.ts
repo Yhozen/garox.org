@@ -1,20 +1,16 @@
 "use server";
 
-import fetch from "isomorphic-fetch";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
 
 const url = `${process.env.API_URL}/api/now-playing-plain`;
 
-type Data = {
-  name: string;
-};
+const responseSchema = z.object({
+  name: z.string(),
+});
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export const getNowPlaying = async () => {
   const response = await fetch(url);
   const data = await response.json();
 
-  res.status(200).json(data);
-}
+  return responseSchema.parse(data);
+};

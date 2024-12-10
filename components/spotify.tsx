@@ -1,29 +1,29 @@
-import { FC } from 'react'
-import styled from 'styled-components'
-import useSWR from 'swr'
+import { FC } from "react";
+import styled from "styled-components";
+import useSWR from "swr";
 
 const url = process.env.IS_NEXT_EXPORT
   ? `${process.env.API_URL}/api/now-playing-plain`
-  : `/api/hello`
+  : `/api/hello`;
 
 const fetcher = (url: string) =>
-  fetch(url, { mode: process.env.IS_NEXT_EXPORT ? 'cors' : 'no-cors' }).then(
-    response => response.json(),
-  )
+  fetch(url, { mode: process.env.IS_NEXT_EXPORT ? "cors" : "no-cors" }).then(
+    (response) => response.json()
+  );
 
 const SpotifyContainer = styled.div`
   background: white;
   padding: 2rem;
-`
+`;
 
 type SpotifyData = {
-  cover: string
-  artist: string
-  track: string
-  isPlaying: boolean
-  progress: number
-  duration: number
-}
+  cover: string;
+  artist: string;
+  track: string;
+  isPlaying: boolean;
+  progress: number;
+  duration: number;
+};
 
 const WhilePlaying: FC<{ data: SpotifyData }> = ({ data }) => {
   return (
@@ -34,17 +34,17 @@ const WhilePlaying: FC<{ data: SpotifyData }> = ({ data }) => {
       <p>{data.track}</p>
       <p>{data.artist}</p>
     </div>
-  )
-}
+  );
+};
 
 export const Spotify = () => {
-  const { data, error, mutate } = useSWR<SpotifyData>(url, fetcher)
+  const { data, error, mutate } = useSWR<SpotifyData>(url, fetcher);
 
-  const isLoading = !data && !error
+  const isLoading = !data && !error;
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) return <p>Loading...</p>;
 
-  if (error) return <p>error loading</p>
+  if (error) return <p>error loading</p>;
 
   return (
     <SpotifyContainer>
@@ -52,5 +52,5 @@ export const Spotify = () => {
       {!data?.isPlaying && <p>not playig spotify, ears resting</p>}
       <button onClick={() => mutate()}> refresh</button>
     </SpotifyContainer>
-  )
-}
+  );
+};

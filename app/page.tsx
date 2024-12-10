@@ -1,5 +1,5 @@
-import { RetroMac } from '@/components/retro-mac'
+import { RetroMac } from "@/components/retro-mac";
 
 export default function Home() {
-  return <RetroMac />
+  return <RetroMac />;
 }
