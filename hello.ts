@@ -1,4 +1,5 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+'use server'
+
 import fetch from 'isomorphic-fetch'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
