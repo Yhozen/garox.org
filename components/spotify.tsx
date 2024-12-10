@@ -1,5 +1,5 @@
 import { FC } from "react";
-import styled from "styled-components";
+
 import useSWR from "swr";
 
 const url = process.env.IS_NEXT_EXPORT
@@ -10,11 +10,6 @@ const fetcher = (url: string) =>
   fetch(url, { mode: process.env.IS_NEXT_EXPORT ? "cors" : "no-cors" }).then(
     (response) => response.json()
   );
-
-const SpotifyContainer = styled.div`
-  background: white;
-  padding: 2rem;
-`;
 
 type SpotifyData = {
   cover: string;
@@ -28,7 +23,7 @@ type SpotifyData = {
 const WhilePlaying: FC<{ data: SpotifyData }> = ({ data }) => {
   return (
     <div>
-      <img src={data.cover} />
+      <img alt="spotify cover" src={data.cover} />
       <br />
       <progress max={data.duration} value={data.progress} />
       <p>{data.track}</p>
@@ -47,10 +42,10 @@ export const Spotify = () => {
   if (error) return <p>error loading</p>;
 
   return (
-    <SpotifyContainer>
+    <div className="bg-white p-2">
       {data && data.isPlaying && <WhilePlaying data={data} />}
       {!data?.isPlaying && <p>not playig spotify, ears resting</p>}
       <button onClick={() => mutate()}> refresh</button>
-    </SpotifyContainer>
+    </div>
   );
 };
