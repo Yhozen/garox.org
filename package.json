@@ -15,8 +15,8 @@
     "swr": "^2.2.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.0",
-    "zustand": "^4.3.9"
+    "zod": "^4.2.1",
+    "zustand": "^5.0.9"
   },
   "keywords": [
     "portfolio"
@@ -29,7 +29,8 @@
     "start": "next start",
     "predeploy": "next build && next export",
     "deploy": "gh-pages -d out -b master",
-    "lint": "next lint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "devDependencies": {
     "typescript": "^5",
