@@ -495,9 +495,9 @@ export function RetroMac() {
               content: `
 Garox's Macintosh IIfx
 
-Age: 26
-Location: Santiago, Chile
-Work: CTO @ Reccupera
+Age: 27
+Location: New York, USA
+Work: Staff Engineer @ Peerbound
 
 System Software 7.0.1
             `,
