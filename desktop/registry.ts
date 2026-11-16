@@ -1,0 +1,40 @@
+import type { ComponentType } from "react";
+import { About } from "@/apps/about";
+import { Finder } from "@/apps/finder";
+import { SimpleText } from "@/apps/simpletext";
+import type { FsNode } from "./fs";
+
+/**
+ * An app renders the contents of a window. It only receives serializable
+ * props and talks to the shell through `useWindow()`/`useDesktop()`, so it
+ * could later be served from elsewhere (e.g. a microfrontend in an iframe).
+ */
+export type AppProps = { node: FsNode };
+
+export type AppDefinition = {
+  Component: ComponentType<AppProps>;
+  /** Default window width in pixels on larger screens. */
+  width: number;
+};
+
+export const apps = {
+  finder: { Component: Finder, width: 320 },
+  simpletext: { Component: SimpleText, width: 360 },
+  about: { Component: About, width: 280 },
+} satisfies Record<string, AppDefinition>;
+
+export type AppId = keyof typeof apps;
+
+/** Which app opens a node; links have none because they leave the site. */
+export function appFor(node: FsNode): AppDefinition | null {
+  switch (node.type) {
+    case "folder":
+      return apps.finder;
+    case "text":
+      return apps.simpletext;
+    case "app":
+      return apps[node.app];
+    case "link":
+      return null;
+  }
+}
