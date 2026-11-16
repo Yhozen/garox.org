@@ -39,7 +39,7 @@ function Screen() {
 
   return (
     <div
-      className="h-screen flex flex-col font-sans text-black overflow-hidden"
+      className="h-dvh flex flex-col font-sans text-black overflow-hidden touch-manipulation"
       style={{
         background: `
         radial-gradient(circle, #000 0.5px, transparent 0.5px) 0 0 / 8px 8px,
@@ -55,7 +55,7 @@ function Screen() {
             <NodeIcon key={node.path} node={node} onOpen={open} />
           ))}
         </div>
-        <div className="absolute bottom-4 right-4">
+        <div className="absolute right-4 bottom-[max(1rem,env(safe-area-inset-bottom))]">
           <NodeIcon node={aboutItem} onOpen={open} />
         </div>
         <Windows constraints={area} />

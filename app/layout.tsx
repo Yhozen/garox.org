@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "Garox.org",
   description: "Garox's personal website",
 };
+
+// `viewport-fit=cover` exposes the safe-area insets used to clear notches.
+export const viewport: Viewport = { viewportFit: "cover", themeColor: "#ffffff" };
 
 export default function RootLayout({
   children,
