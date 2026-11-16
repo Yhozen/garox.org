@@ -1,4 +1,4 @@
-import { RetroMac } from "@/components/retro-mac";
+import { RetroMac } from "@/desktop/desktop";
 
 export default function Home() {
   return <RetroMac />;
