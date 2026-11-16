@@ -7,10 +7,9 @@ import { useDesktop } from "./desktop-context";
 type MenuItem = { label: string; action?: () => void };
 
 export function MenuBar() {
-  const { stack, close } = useDesktop();
+  const { closeFront } = useDesktop();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const ref = useRef<HTMLElement>(null);
-  const front = stack.at(-1);
 
   useEffect(() => {
     if (!activeMenu) return;
@@ -31,7 +30,7 @@ export function MenuBar() {
       { label: "New Folder" },
       { label: "Open" },
       { label: "Print" },
-      { label: "Close Window", action: front ? () => close(front) : undefined },
+      { label: "Close Window", action: closeFront },
     ],
     Edit: ["Undo", "Cut", "Copy", "Paste", "Clear", "Select All"].map((label) => ({ label })),
     View: ["by Small Icon", "by Icon", "by Name", "by Date", "by Size", "by Kind"].map((label) => ({

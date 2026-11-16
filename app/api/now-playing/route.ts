@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getNowPlaying } from "@/lib/spotify";
 
 /**
@@ -7,6 +8,8 @@ import { getNowPlaying } from "@/lib/spotify";
 const CACHE = "public, s-maxage=15, stale-while-revalidate=45";
 
 export async function GET() {
+  // Always ask Spotify at request time; never prerender a "nothing playing" answer.
+  await connection();
   try {
     return Response.json(await getNowPlaying(), { headers: { "Cache-Control": CACHE } });
   } catch (error) {

@@ -1,15 +1,15 @@
 import type { AppId } from "./registry";
 
-/** What a post's MDX file exports as `metadata`, plus its file name. */
-export type PostMeta = { slug: string; title: string; date: string; description: string };
+/** A post: app/posts/<slug>/page.mdx exports `metadata` (title, description) and `published`. */
+export type PostMeta = { slug: string; title: string; description: string; published: string };
 
 type Kind =
   | { type: "folder"; children: FsNode[] }
   | { type: "text"; content: string }
   | { type: "link"; url: string }
   | { type: "app"; app: AppId }
-  /** Rendered on the server (an MDX post) and streamed into its window. */
-  | { type: "document"; date: string; description: string };
+  /** An MDX post. Its page is app/posts/<slug>/page.mdx. */
+  | { type: "document"; published: string; description: string };
 
 /** Anything that can appear as an icon. `path` doubles as the window id. */
 export type FsNode = { name: string; path: string } & Kind;
@@ -38,12 +38,13 @@ const app =
   (parent) => ({ type: "app", name, path: join(parent, slug), app: id });
 
 const document =
-  ({ slug, title, date, description }: PostMeta): Make =>
-  (parent) => ({ type: "document", name: title, path: join(parent, slug), date, description });
+  ({ slug, title, published, description }: PostMeta): Make =>
+  (parent) => ({ type: "document", name: title, path: join(parent, slug), published, description });
 
 /**
- * Builds the desktop. Posts come from `content/posts/*.mdx`, so the server
- * reads them and hands the same list to the client to build an identical tree.
+ * Builds the desktop. Every node's path is also its URL (`/posts/hello-world`,
+ * `/now-playing`). Posts come from app/posts, so the server lists them and
+ * hands the same list to the client to build an identical tree.
  */
 export function createFileSystem(posts: PostMeta[]) {
   const desktopItems: FsNode[] = [
@@ -102,6 +103,8 @@ export function createFileSystem(posts: PostMeta[]) {
 
 export type FileSystem = ReturnType<typeof createFileSystem>;
 
-/** The link to share for a window: posts get a pretty URL, the rest a desktop URL. */
-export const shareUrl = (node: FsNode): string =>
-  node.type === "document" && node.path.startsWith("posts/") ? `/${node.path}` : `/?w=${node.path}`;
+/** Every node opens fullscreen at its own path, so that is the link to share. */
+export const shareUrl = (node: FsNode): string => `/${node.path}`;
+
+/** The node path a URL pathname shows fullscreen ("" for the bare desktop). */
+export const pathFromUrl = (pathname: string): string => decodeURIComponent(pathname.slice(1));

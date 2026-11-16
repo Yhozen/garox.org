@@ -1,3 +1,7 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useDesktop, useMode } from "./desktop-context";
 import type { FsNode } from "./fs";
 import type { AppId } from "./registry";
 
@@ -70,13 +74,28 @@ const icons = {
 };
 const appIcons: Partial<Record<AppId, () => React.JSX.Element>> = { nowplaying: RadioIcon };
 
-/** A labelled icon that opens its node when clicked. */
-export function NodeIcon({ node, onOpen }: { node: FsNode; onOpen: (path: string) => void }) {
+/**
+ * A labelled icon that opens its node when clicked. Opened from a fullscreen
+ * page, it opens fullscreen too; the zoom rects start from the glyph.
+ */
+export function NodeIcon({ node }: { node: FsNode }) {
+  const { open } = useDesktop();
+  const mode = useMode();
+  const router = useRouter();
   const Glyph = (node.type === "app" && appIcons[node.app]) || icons[node.type];
+  // Anything that will open fullscreen is a page; fetch it while the pointer hovers.
+  const prefetch = () => {
+    if (node.type === "document" || (mode === "fullscreen" && node.type !== "link")) {
+      router.prefetch(`/${node.path}`);
+    }
+  };
   return (
     <button
       type="button"
-      onClick={() => onOpen(node.path)}
+      data-node={node.path}
+      onPointerEnter={prefetch}
+      onFocus={prefetch}
+      onClick={(event) => open(node.path, { from: event.currentTarget.querySelector("svg"), mode })}
       className="flex flex-col items-center w-16 mb-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-black"
     >
       <Glyph />
