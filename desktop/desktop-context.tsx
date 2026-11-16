@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { lookup } from "./fs";
-import { appFor } from "./registry";
+import { useQueryStates } from "nuqs";
+import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from "react";
+import { lookup, openWindows } from "./fs";
+import { titleFor, windowsParam } from "./search-params";
 
 type Desktop = {
   /** Open window paths, back to front. */
@@ -14,39 +15,47 @@ type Desktop = {
 
 const DesktopContext = createContext<Desktop | null>(null);
 
-export function DesktopProvider({ children }: { children: ReactNode }) {
-  const [rawStack, setStack] = useState<string[]>([]);
+const toFront = (stack: string[], path: string) => [...stack.filter((p) => p !== path), path];
 
-  // Ignore anything that no longer resolves to an openable node.
-  const stack = useMemo(
-    () =>
-      rawStack.filter((path, i) => {
-        const node = lookup(path);
-        return node && appFor(node) && rawStack.indexOf(path) === i;
-      }),
-    [rawStack],
+/**
+ * The URL is the source of truth for which windows are open. Opening a
+ * window pushes a history entry so Back closes it; focusing and closing
+ * replace the current entry so history doesn't fill up.
+ */
+export function DesktopProvider({ children }: { children: ReactNode }) {
+  const [{ w: rawStack }, setParams] = useQueryStates(windowsParam);
+  const stack = useMemo(() => openWindows(rawStack), [rawStack]);
+
+  useEffect(() => {
+    document.title = titleFor(stack);
+  }, [stack]);
+
+  const open = useCallback(
+    (path: string) => {
+      const node = lookup(path);
+      if (!node) return;
+      if (node.type === "link") {
+        window.open(node.url, "_blank", "noopener,noreferrer");
+        return;
+      }
+      void setParams((prev) => ({ w: toFront(openWindows(prev.w), path) }), { history: "push" });
+    },
+    [setParams],
   );
 
-  const open = useCallback((path: string) => {
-    const node = lookup(path);
-    if (!node) return;
-    if (node.type === "link") {
-      window.open(node.url, "_blank", "noopener,noreferrer");
-      return;
-    }
-    setStack((prev) => [...prev.filter((p) => p !== path), path]);
-  }, []);
-
-  const close = useCallback((path: string) => {
-    setStack((prev) => prev.filter((p) => p !== path));
-  }, []);
+  const close = useCallback(
+    (path: string) => {
+      void setParams((prev) => ({ w: openWindows(prev.w).filter((p) => p !== path) }));
+    },
+    [setParams],
+  );
 
   const focus = useCallback(
     (path: string) => {
       if (stack.at(-1) === path) return;
-      setStack((prev) => [...prev.filter((p) => p !== path), path]);
+      void setParams((prev) => ({ w: toFront(openWindows(prev.w), path) }));
     },
-    [stack],
+    [stack, setParams],
   );
 
   const value = useMemo(() => ({ stack, open, close, focus }), [stack, open, close, focus]);

@@ -71,3 +71,10 @@ const order = [...index.keys()];
 export const lookup = (path: string): FsNode | undefined => index.get(path);
 
 export const indexOf = (path: string): number => order.indexOf(path);
+
+/** Keeps paths that open a window (links leave the site), without duplicates. */
+export const openWindows = (paths: string[]): string[] =>
+  paths.filter((path, i) => {
+    const node = index.get(path);
+    return node && node.type !== "link" && paths.indexOf(path) === i;
+  });
