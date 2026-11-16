@@ -5,13 +5,14 @@ import { createServer } from "node:http";
  *
  * 1. Create an app at https://developer.spotify.com/dashboard with the
  *    redirect URI http://127.0.0.1:8888/callback.
- * 2. SPOTIFY_CLIENT_ID=… SPOTIFY_CLIENT_SECRET=… node scripts/spotify-token.ts
- * 3. Open the printed URL, approve, and copy the token into
- *    SPOTIFY_REFRESH_TOKEN (locally in .env.local, and in Vercel).
+ * 2. Put SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in .env, then run
+ *    `bun run spotify:token`.
+ * 3. Open the printed URL, approve, and add the printed
+ *    SPOTIFY_REFRESH_TOKEN to .env (and to Vercel).
  */
 
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret } = process.env;
-if (!id || !secret) throw new Error("Set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET");
+if (!id || !secret) throw new Error("Set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in .env");
 
 const redirectUri = "http://127.0.0.1:8888/callback";
 const state = crypto.randomUUID();

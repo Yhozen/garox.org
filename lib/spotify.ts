@@ -3,7 +3,7 @@
  *
  * Needs a Spotify app's SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET, plus a
  * SPOTIFY_REFRESH_TOKEN granted the `user-read-currently-playing` and
- * `user-read-recently-played` scopes (`node scripts/spotify-token.ts`).
+ * `user-read-recently-played` scopes (`bun run spotify:token`).
  */
 
 export type NowPlaying = {
