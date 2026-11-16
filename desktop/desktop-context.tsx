@@ -21,13 +21,23 @@ type SetWindows = ReturnType<typeof useQueryStates<typeof windowsParam>>[1];
 /** Where something was opened from: on the desktop/in a window, or fullscreen. */
 export type Mode = "window" | "fullscreen";
 
+/**
+ * Tailwind's `sm` breakpoint. Wider screens get a real desktop with
+ * draggable windows; below it every window is a full-screen sheet.
+ */
+export const WIDE_SCREEN = "(min-width: 40rem)";
+
 type Desktop = {
   fs: FileSystem;
   /** The desktop area below the menu bar; fullscreen fills it. */
   area: RefObject<HTMLElement | null>;
   /** True while a fullscreen page is loading. */
   pending: boolean;
-  /** Opens a node. Posts, and anything opened from a fullscreen page, open fullscreen. */
+  /**
+   * Opens a node as a window. Anything opened from a fullscreen page opens
+   * fullscreen too, and on phones posts open at their own URL (a window
+   * fills the screen there anyway, and the address bar stays shareable).
+   */
   open: (path: string, options?: { from?: Element | null; mode?: Mode }) => void;
   close: (path: string, from?: Element | null) => void;
   focus: (path: string) => void;
@@ -127,7 +137,8 @@ export function DesktopProvider({ posts, children }: { posts: PostMeta[]; childr
           window.open(node.url, "_blank", "noopener,noreferrer");
           return;
         }
-        if (node.type === "document" || mode === "fullscreen") {
+        const phone = !matchMedia(WIDE_SCREEN).matches;
+        if (mode === "fullscreen" || (node.type === "document" && phone)) {
           goFullscreen(path, rect(from));
           return;
         }

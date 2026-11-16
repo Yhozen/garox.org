@@ -12,7 +12,7 @@ import {
   type RefObject,
 } from "react";
 import { cn } from "@/lib/utils";
-import { ModeProvider, useDesktop } from "./desktop-context";
+import { ModeProvider, useDesktop, WIDE_SCREEN } from "./desktop-context";
 import type { FsNode } from "./fs";
 import { arrive } from "./zoom";
 
@@ -26,9 +26,6 @@ export function useWindow(): WindowApi {
   if (!api) throw new Error("useWindow must be used inside a <Window>");
   return api;
 }
-
-/** Below Tailwind's `sm` breakpoint windows are full-screen sheets that don't drag. */
-const DRAGGABLE = "(min-width: 40rem)";
 
 /** Deterministic cascade so server and client agree on where a window starts. */
 function defaultPosition(index: number) {
@@ -163,7 +160,8 @@ export function Window({
         onClose={api.close}
         onZoom={() => frame.current && zoom(node.path, frame.current)}
         onPointerDown={(event) => {
-          if (matchMedia(DRAGGABLE).matches) controls.start(event);
+          // Phones get full-screen sheets that don't drag.
+          if (matchMedia(WIDE_SCREEN).matches) controls.start(event);
         }}
         className="sm:cursor-grab sm:active:cursor-grabbing"
       />

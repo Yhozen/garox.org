@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useDesktop, useMode } from "./desktop-context";
+import { load } from "@/apps/reader";
+import { useDesktop, useMode, WIDE_SCREEN } from "./desktop-context";
 import type { FsNode } from "./fs";
 import type { AppId } from "./registry";
 
@@ -75,19 +76,22 @@ const icons = {
 const appIcons: Partial<Record<AppId, () => React.JSX.Element>> = { nowplaying: RadioIcon };
 
 /**
- * A labelled icon that opens its node when clicked. Opened from a fullscreen
- * page, it opens fullscreen too; the zoom rects start from the glyph.
+ * A labelled icon that opens its node when clicked, usually as a window
+ * (see `open`); the zoom rects start from the glyph.
  */
 export function NodeIcon({ node }: { node: FsNode }) {
   const { open } = useDesktop();
   const mode = useMode();
   const router = useRouter();
   const Glyph = (node.type === "app" && appIcons[node.app]) || icons[node.type];
-  // Anything that will open fullscreen is a page; fetch it while the pointer hovers.
+  // Fetch what a click will open while the pointer hovers: the page if it
+  // opens fullscreen, or a post's MDX if it opens as a window.
   const prefetch = () => {
-    if (node.type === "document" || (mode === "fullscreen" && node.type !== "link")) {
-      router.prefetch(`/${node.path}`);
-    }
+    if (node.type === "link") return;
+    const fullscreen =
+      mode === "fullscreen" || (node.type === "document" && !matchMedia(WIDE_SCREEN).matches);
+    if (fullscreen) router.prefetch(`/${node.path}`);
+    else if (node.type === "document") void load(node.path.split("/").at(-1)!);
   };
   return (
     <button

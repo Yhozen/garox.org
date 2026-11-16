@@ -43,11 +43,19 @@ const pointIn = (rect: Box): Box => ({
 /**
  * Draws the trail from `from` to `to`. Resolves as the last rectangle lands,
  * which is when the destination should appear.
+ *
+ * `to` can be a function: each rectangle measures it as it's drawn, so a
+ * window that grows while it opens (a post loading in) is still where the
+ * trail ends up.
  */
-export function zoomRects(from: DOMRect | Box, to: DOMRect | Box, grow = true): Promise<void> {
+export function zoomRects(
+  from: DOMRect | Box,
+  to: DOMRect | Box | (() => DOMRect | Box),
+  grow = true,
+): Promise<void> {
   if (reduceMotion()) return Promise.resolve();
   const a = box(from);
-  const b = box(to);
+  const target = typeof to === "function" ? () => box(to()) : () => box(to);
 
   const layer = document.createElement("div");
   layer.setAttribute("aria-hidden", "true");
@@ -55,7 +63,8 @@ export function zoomRects(from: DOMRect | Box, to: DOMRect | Box, grow = true): 
     "position:fixed;inset:0;pointer-events:none;z-index:2147483647;mix-blend-mode:difference";
   document.body.append(layer);
 
-  const animations = Array.from({ length: RECTS }, (_, i) => {
+  const draw = (i: number) => {
+    const b = target();
     const p = (i + 1) / RECTS;
     // Opening accelerates toward the window, closing decelerates into the icon.
     const t = grow ? p * p : 1 - (1 - p) * (1 - p);
@@ -68,20 +77,21 @@ export function zoomRects(from: DOMRect | Box, to: DOMRect | Box, grow = true): 
       `width:${Math.max(lerp(a.width, b.width), 2)}px`,
       `height:${Math.max(lerp(a.height, b.height), 2)}px`,
       "border:1px solid #fff",
-      "opacity:0",
     ].join(";");
     layer.append(rect);
-    return rect.animate(
+    rect.animate(
       [
         { opacity: 1, offset: 0 },
         { opacity: 1, offset: 0.55 },
         { opacity: 0, offset: 1 },
       ],
-      { delay: i * STEP, duration: LIFE, fill: "forwards" },
+      { duration: LIFE, fill: "forwards" },
     );
-  });
+  };
 
-  void Promise.all(animations.map((animation) => animation.finished)).finally(() => layer.remove());
+  // One rectangle per frame step; the layer goes once the last one has faded.
+  for (let i = 0; i < RECTS; i++) setTimeout(() => draw(i), i * STEP);
+  setTimeout(() => layer.remove(), (RECTS - 1) * STEP + LIFE);
   return new Promise((resolve) => setTimeout(resolve, (RECTS - 1) * STEP + STEP));
 }
 
@@ -111,7 +121,7 @@ export function arrive(path: string, element: HTMLElement) {
   if (!entry || Date.now() - entry.at > STALE_MS) return;
 
   element.style.visibility = "hidden";
-  const done = entry.done ?? zoomRects(entry.from, element.getBoundingClientRect());
+  const done = entry.done ?? zoomRects(entry.from, () => element.getBoundingClientRect());
   void done.then(() => {
     element.style.visibility = "";
     if (!reduceMotion()) {

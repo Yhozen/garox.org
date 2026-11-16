@@ -7,8 +7,8 @@ import { PostFooter } from "./post-footer";
 
 const modules = new Map<string, Promise<{ default: MDXContent }>>();
 
-/** Each post's page module, loaded once, the first time it opens as a window. */
-function load(slug: string) {
+/** Each post's page module, loaded once: on hover, or when it first opens as a window. */
+export function load(slug: string) {
   let loaded = modules.get(slug);
   if (!loaded) {
     loaded = import(`@/app/posts/${slug}/page.mdx`) as Promise<{ default: MDXContent }>;
@@ -23,8 +23,9 @@ function Body({ slug }: { slug: string }) {
 }
 
 /**
- * A post shrunk into a window with the zoom box. Its page renders on the
- * server when it's fullscreen; as a window, the same MDX module loads here.
+ * A post in a window: how posts open from the desktop. Fullscreen (its own
+ * URL) the page renders on the server; as a window, the same MDX module
+ * loads here.
  */
 export function Reader({ node }: AppProps) {
   if (node.type !== "document") return null;
