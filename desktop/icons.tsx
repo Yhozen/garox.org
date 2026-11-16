@@ -1,4 +1,5 @@
 import type { FsNode } from "./fs";
+import type { AppId } from "./registry";
 
 const frame = "w-10 h-10";
 
@@ -38,11 +39,24 @@ function MacIcon() {
   );
 }
 
+function RadioIcon() {
+  return (
+    <svg className={frame} viewBox="0 0 40 40" fill="none" aria-hidden>
+      <path d="M12 10l16-5" stroke="black" strokeWidth="2" />
+      <rect x="4" y="10" width="32" height="22" fill="white" stroke="black" strokeWidth="2" />
+      <circle cx="12" cy="23" r="5" stroke="black" strokeWidth="2" />
+      <circle cx="28" cy="23" r="5" stroke="black" strokeWidth="2" />
+      <path d="M17 15h6" stroke="black" strokeWidth="2" />
+    </svg>
+  );
+}
+
 const icons = { folder: FolderIcon, link: LinkIcon, text: TextIcon, app: MacIcon };
+const appIcons: Partial<Record<AppId, () => React.JSX.Element>> = { nowplaying: RadioIcon };
 
 /** A labelled icon that opens its node when clicked. */
 export function NodeIcon({ node, onOpen }: { node: FsNode; onOpen: (path: string) => void }) {
-  const Glyph = icons[node.type];
+  const Glyph = (node.type === "app" && appIcons[node.app]) || icons[node.type];
   return (
     <button
       type="button"

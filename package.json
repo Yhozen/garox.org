@@ -17,7 +17,8 @@
     "start": "next start",
     "check": "oxfmt --check && oxlint",
     "lint": "oxlint",
-    "fmt": "oxfmt"
+    "fmt": "oxfmt",
+    "spotify:token": "node --env-file=.env scripts/spotify-token.mts"
   },
   "dependencies": {
     "cn": "^0.5.2",
