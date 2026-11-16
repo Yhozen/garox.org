@@ -169,7 +169,7 @@ const MenuBar = () => {
       {Object.entries(menus).map(([menu, items]) => (
         <div key={menu} className="relative">
           <button
-            className={`focus:outline-none ${activeMenu === menu ? "bg-black text-white" : ""}`}
+            className={`focus:outline-hidden ${activeMenu === menu ? "bg-black text-white" : ""}`}
             onClick={() => setActiveMenu(activeMenu === menu ? null : menu)}
           >
             {menu}
