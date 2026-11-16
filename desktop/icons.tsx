@@ -51,7 +51,23 @@ function RadioIcon() {
   );
 }
 
-const icons = { folder: FolderIcon, link: LinkIcon, text: TextIcon, app: MacIcon };
+function DocumentIcon() {
+  return (
+    <svg className={frame} viewBox="0 0 40 40" fill="none" aria-hidden>
+      <path d="M9 4h15l7 7v25H9z" fill="white" stroke="black" strokeWidth="2" />
+      <path d="M24 4v7h7" stroke="black" strokeWidth="2" />
+      <path d="M13 17h14M13 22h14M13 27h14M13 32h9" stroke="black" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+const icons = {
+  folder: FolderIcon,
+  link: LinkIcon,
+  text: TextIcon,
+  app: MacIcon,
+  document: DocumentIcon,
+};
 const appIcons: Partial<Record<AppId, () => React.JSX.Element>> = { nowplaying: RadioIcon };
 
 /** A labelled icon that opens its node when clicked. */

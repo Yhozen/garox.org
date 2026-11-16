@@ -1,13 +1,28 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
-import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from "react";
-import { lookup, openWindows } from "./fs";
-import { titleFor, windowsParam } from "./search-params";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useTransition,
+  type ReactNode,
+} from "react";
+import { createFileSystem, type FileSystem, type PostMeta } from "./fs";
+import { windowsParam } from "./search-params";
+
+/** Window contents rendered on the server, keyed by window path. */
+export type ServerContent = Record<string, ReactNode>;
 
 type Desktop = {
+  fs: FileSystem;
   /** Open window paths, back to front. */
   stack: string[];
+  content: ServerContent;
+  /** True while the server renders a window that was just opened. */
+  pending: boolean;
   open: (path: string) => void;
   close: (path: string) => void;
   focus: (path: string) => void;
@@ -21,44 +36,68 @@ const toFront = (stack: string[], path: string) => [...stack.filter((p) => p !==
  * The URL is the source of truth for which windows are open. Opening a
  * window pushes a history entry so Back closes it; focusing and closing
  * replace the current entry so history doesn't fill up.
+ *
+ * Most windows render in the browser, so those updates stay shallow. A
+ * document (an MDX post) renders on the server: opening one makes a
+ * non-shallow update, Next re-renders the page for the new URL, and the
+ * post arrives in `content`.
  */
-export function DesktopProvider({ children }: { children: ReactNode }) {
+export function DesktopProvider({
+  posts,
+  content,
+  children,
+}: {
+  posts: PostMeta[];
+  content: ServerContent;
+  children: ReactNode;
+}) {
+  const fs = useMemo(() => createFileSystem(posts), [posts]);
   const [{ w: rawStack }, setParams] = useQueryStates(windowsParam);
-  const stack = useMemo(() => openWindows(rawStack), [rawStack]);
+  const stack = useMemo(() => fs.openWindows(rawStack), [fs, rawStack]);
+  const [pending, startTransition] = useTransition();
 
   useEffect(() => {
-    document.title = titleFor(stack);
-  }, [stack]);
+    document.title = fs.titleFor(stack);
+  }, [fs, stack]);
 
   const open = useCallback(
     (path: string) => {
-      const node = lookup(path);
+      const node = fs.lookup(path);
       if (!node) return;
       if (node.type === "link") {
         window.open(node.url, "_blank", "noopener,noreferrer");
         return;
       }
-      void setParams((prev) => ({ w: toFront(openWindows(prev.w), path) }), { history: "push" });
+      // Only ask the server when it hasn't already rendered this window.
+      const shallow = node.type !== "document" || path in content;
+      void setParams((prev) => ({ w: toFront(fs.openWindows(prev.w), path) }), {
+        history: "push",
+        shallow,
+        startTransition: shallow ? undefined : startTransition,
+      });
     },
-    [setParams],
+    [fs, content, setParams],
   );
 
   const close = useCallback(
     (path: string) => {
-      void setParams((prev) => ({ w: openWindows(prev.w).filter((p) => p !== path) }));
+      void setParams((prev) => ({ w: fs.openWindows(prev.w).filter((p) => p !== path) }));
     },
-    [setParams],
+    [fs, setParams],
   );
 
   const focus = useCallback(
     (path: string) => {
       if (stack.at(-1) === path) return;
-      void setParams((prev) => ({ w: toFront(openWindows(prev.w), path) }));
+      void setParams((prev) => ({ w: toFront(fs.openWindows(prev.w), path) }));
     },
-    [stack, setParams],
+    [fs, stack, setParams],
   );
 
-  const value = useMemo(() => ({ stack, open, close, focus }), [stack, open, close, focus]);
+  const value = useMemo(
+    () => ({ fs, stack, content, pending, open, close, focus }),
+    [fs, stack, content, pending, open, close, focus],
+  );
 
   return <DesktopContext value={value}>{children}</DesktopContext>;
 }

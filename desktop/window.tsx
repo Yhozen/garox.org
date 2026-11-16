@@ -4,7 +4,7 @@ import { motion, useDragControls } from "motion/react";
 import { createContext, useContext, useMemo, type ReactNode, type RefObject } from "react";
 import { cn } from "@/lib/utils";
 import { useDesktop } from "./desktop-context";
-import { indexOf, type FsNode } from "./fs";
+import type { FsNode } from "./fs";
 
 type WindowApi = { node: FsNode; focused: boolean; close: () => void };
 
@@ -21,14 +21,15 @@ export function useWindow(): WindowApi {
 const DRAGGABLE = "(min-width: 40rem)";
 
 /** Deterministic cascade so server and client agree on where a window starts. */
-function defaultPosition(path: string) {
-  const step = Math.max(indexOf(path), 0) % 8;
+function defaultPosition(index: number) {
+  const step = Math.max(index, 0) % 8;
   return { x: 96 + step * 32, y: 32 + step * 24 };
 }
 
 export function Window({
   node,
   width,
+  height = 400,
   zIndex,
   focused,
   constraints,
@@ -36,14 +37,16 @@ export function Window({
 }: {
   node: FsNode;
   width: number;
+  /** Maximum content height in pixels on larger screens. */
+  height?: number;
   zIndex: number;
   focused: boolean;
   constraints: RefObject<HTMLElement | null>;
   children: ReactNode;
 }) {
-  const { close, focus } = useDesktop();
+  const { fs, close, focus } = useDesktop();
   const controls = useDragControls();
-  const initial = useMemo(() => defaultPosition(node.path), [node.path]);
+  const initial = useMemo(() => defaultPosition(fs.indexOf(node.path)), [fs, node.path]);
   const api = useMemo(
     () => ({ node, focused, close: () => close(node.path) }),
     [node, focused, close],
@@ -67,7 +70,7 @@ export function Window({
         "max-sm:inset-0 max-sm:w-auto! max-sm:transform-none! max-sm:border-0 max-sm:shadow-none",
         !focused && "max-sm:hidden",
       )}
-      style={{ width, zIndex }}
+      style={{ width, zIndex, "--content-height": `${height}px` } as React.CSSProperties}
     >
       <header
         onPointerDown={(event) => {
@@ -95,7 +98,7 @@ export function Window({
           {node.name}
         </h2>
       </header>
-      <div className="p-4 max-h-[400px] overflow-auto max-sm:flex-1 max-sm:max-h-none max-sm:pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="p-4 max-h-(--content-height) overflow-auto max-sm:flex-1 max-sm:max-h-none max-sm:pb-[max(1rem,env(safe-area-inset-bottom))]">
         <WindowContext value={api}>{children}</WindowContext>
       </div>
     </motion.section>

@@ -15,6 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://garox.org"),
   title: "Garox.org",
   description: "Garox's personal website",
 };
