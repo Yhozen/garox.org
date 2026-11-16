@@ -61,9 +61,10 @@ export function Window({
       initial={initial}
       onPointerDownCapture={() => focus(node.path)}
       className={cn(
-        "absolute top-0 left-0 flex flex-col bg-white border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)]",
+        // System 7 frame with our own heavier drop shadow.
+        "absolute top-0 left-0 flex flex-col bg-white border border-black shadow-[4px_4px_0_#000]",
         // Phones: the front window fills the desktop and the others wait behind it.
-        "max-sm:inset-0 max-sm:w-auto! max-sm:transform-none! max-sm:border-x-0 max-sm:border-b-0 max-sm:shadow-none",
+        "max-sm:inset-0 max-sm:w-auto! max-sm:transform-none! max-sm:border-0 max-sm:shadow-none",
         !focused && "max-sm:hidden",
       )}
       style={{ width, zIndex }}
@@ -72,20 +73,27 @@ export function Window({
         onPointerDown={(event) => {
           if (matchMedia(DRAGGABLE).matches) controls.start(event);
         }}
-        className={cn(
-          "relative flex items-center justify-center border-b-2 border-black px-2 py-1 max-sm:py-2 sm:cursor-grab sm:active:cursor-grabbing touch-none select-none",
-          focused &&
-            "bg-[repeating-linear-gradient(to_bottom,black_0_1px,white_1px_3px)] bg-clip-content",
-        )}
+        className="relative flex h-5 shrink-0 items-center justify-center border-b border-black max-sm:h-11 sm:cursor-grab sm:active:cursor-grabbing touch-none select-none"
       >
-        <button
-          type="button"
-          aria-label={`Close ${node.name}`}
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={api.close}
-          className="absolute left-2 w-3 h-3 max-sm:w-4 max-sm:h-4 border border-black bg-white hover:bg-gray-600 active:bg-black after:absolute after:-inset-3.5"
-        />
-        <h2 className="text-sm font-chicago bg-white px-2">{node.name}</h2>
+        {focused && (
+          <>
+            {/* Four pinstripes (five on phones), inset from the frame; only the active window gets them. */}
+            <span
+              aria-hidden
+              className="absolute inset-x-0.5 top-1/2 h-[10px] -translate-y-1/2 bg-[repeating-linear-gradient(to_bottom,#000_0_1px,transparent_1px_3px)] max-sm:h-[13px]"
+            />
+            <button
+              type="button"
+              aria-label={`Close ${node.name}`}
+              onPointerDown={(event) => event.stopPropagation()}
+              onClick={api.close}
+              className="absolute left-2 size-[11px] border border-black bg-white shadow-[0_0_0_1px_#fff] active:bg-black max-sm:left-3 max-sm:size-[19px] after:absolute after:-inset-4"
+            />
+          </>
+        )}
+        <h2 className="relative bg-white px-1.5 text-[13px] leading-none font-bold font-chicago max-sm:text-base">
+          {node.name}
+        </h2>
       </header>
       <div className="p-4 max-h-[400px] overflow-auto max-sm:flex-1 max-sm:max-h-none max-sm:pb-[max(1rem,env(safe-area-inset-bottom))]">
         <WindowContext value={api}>{children}</WindowContext>
