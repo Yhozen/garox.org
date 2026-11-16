@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import { About } from "@/apps/about";
 import { Finder } from "@/apps/finder";
+import { NowPlaying } from "@/apps/now-playing";
 import { SimpleText } from "@/apps/simpletext";
 import type { FsNode } from "./fs";
 
@@ -21,6 +22,7 @@ export const apps = {
   finder: { Component: Finder, width: 320 },
   simpletext: { Component: SimpleText, width: 360 },
   about: { Component: About, width: 340 },
+  nowplaying: { Component: NowPlaying, width: 260 },
 } satisfies Record<string, AppDefinition>;
 
 export type AppId = keyof typeof apps;

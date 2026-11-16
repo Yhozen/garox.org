@@ -53,6 +53,7 @@ export const desktopItems: FsNode[] = [
     text("post2", "post2.txt", "My second blog post content."),
     text("post3", "post3.txt", "My third blog post content."),
   ]),
+  app("now-playing", "Now Playing", "nowplaying"),
 ].map((make) => make(""));
 
 /** The About This Mac icon, pinned to the bottom-right corner. */
