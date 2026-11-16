@@ -1,7 +1,22 @@
-const specs = [
-  ["Age", "26"],
-  ["Location", "Santiago, Chile"],
-  ["Work", "CTO @ Reccupera"],
+import type { ReactNode } from "react";
+
+const specs: [string, ReactNode][] = [
+  ["Age", "28"],
+  ["Location", "New York, NY"],
+  [
+    "Work",
+    <>
+      Software Engineer @{" "}
+      <a
+        href="https://archlending.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline hover:bg-black hover:text-white"
+      >
+        Arch Lending
+      </a>
+    </>,
+  ],
 ];
 
 export function About() {
