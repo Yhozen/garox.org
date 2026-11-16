@@ -20,7 +20,7 @@ export type AppDefinition = {
 export const apps = {
   finder: { Component: Finder, width: 320 },
   simpletext: { Component: SimpleText, width: 360 },
-  about: { Component: About, width: 280 },
+  about: { Component: About, width: 340 },
 } satisfies Record<string, AppDefinition>;
 
 export type AppId = keyof typeof apps;
