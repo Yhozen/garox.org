@@ -126,14 +126,7 @@ const MenuBar = () => {
   const menus = {
     File: ["New Folder", "Open", "Print", "Close Window"],
     Edit: ["Undo", "Cut", "Copy", "Paste", "Clear", "Select All"],
-    View: [
-      "by Small Icon",
-      "by Icon",
-      "by Name",
-      "by Date",
-      "by Size",
-      "by Kind",
-    ],
+    View: ["by Small Icon", "by Icon", "by Name", "by Date", "by Size", "by Kind"],
     Label: [
       "None",
       "Essential",
@@ -144,32 +137,18 @@ const MenuBar = () => {
       "Project 1",
       "Project 2",
     ],
-    Special: [
-      "Clean Up Window",
-      "Empty Trash",
-      "Erase Disk",
-      "Restart",
-      "Shut Down",
-    ],
+    Special: ["Clean Up Window", "Empty Trash", "Erase Disk", "Restart", "Shut Down"],
   };
 
   return (
     <div className="bg-white border-b-2 border-black px-2 py-1 flex items-center space-x-4 text-sm font-chicago relative z-50">
-      <svg
-        className="w-4 h-4"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M1 1h14v14H1V1zm1 1v12h12V2H2zm2 2h8v8H4V4zm1 1v6h6V5H5z"
-          fill="black"
-        />
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1h14v14H1V1zm1 1v12h12V2H2zm2 2h8v8H4V4zm1 1v6h6V5H5z" fill="black" />
       </svg>
       {Object.entries(menus).map(([menu, items]) => (
         <div key={menu} className="relative">
           <button
-            className={`focus:outline-none ${activeMenu === menu ? "bg-black text-white" : ""}`}
+            className={`focus:outline-hidden ${activeMenu === menu ? "bg-black text-white" : ""}`}
             onClick={() => setActiveMenu(activeMenu === menu ? null : menu)}
           >
             {menu}
@@ -202,10 +181,7 @@ const Icon = ({
   svg: React.ReactNode;
   onClick?: () => void;
 }) => (
-  <div
-    className="flex flex-col items-center w-16 mb-4 cursor-pointer"
-    onClick={onClick}
-  >
+  <div className="flex flex-col items-center w-16 mb-4 cursor-pointer" onClick={onClick}>
     {svg}
     <span className="text-xs mt-1 font-chicago text-center">{name}</span>
   </div>
@@ -234,18 +210,8 @@ const Desktop = ({
             >
               {item.type === "folder" ? (
                 <>
-                  <path
-                    d="M5 10h30v25H5z"
-                    fill="white"
-                    stroke="black"
-                    strokeWidth="2"
-                  />
-                  <path
-                    d="M10 5h20v5H10z"
-                    fill="white"
-                    stroke="black"
-                    strokeWidth="2"
-                  />
+                  <path d="M5 10h30v25H5z" fill="white" stroke="black" strokeWidth="2" />
+                  <path d="M10 5h20v5H10z" fill="white" stroke="black" strokeWidth="2" />
                 </>
               ) : item.type === "link" ? (
                 <>
@@ -258,11 +224,7 @@ const Desktop = ({
                     stroke="black"
                     strokeWidth="2"
                   />
-                  <path
-                    d="M15 20h10M20 15l5 5-5 5"
-                    stroke="black"
-                    strokeWidth="2"
-                  />
+                  <path d="M15 20h10M20 15l5 5-5 5" stroke="black" strokeWidth="2" />
                 </>
               ) : (
                 <>
@@ -300,9 +262,7 @@ const WindowContent = ({
   if (item.type === "folder") {
     return (
       <>
-        <div className="text-xs mb-2 font-chicago">
-          {item.children?.length || 0} items
-        </div>
+        <div className="text-xs mb-2 font-chicago">{item.children?.length || 0} items</div>
         <div className="flex flex-wrap justify-between">
           {item.children?.map((child) => (
             <Icon
@@ -318,18 +278,8 @@ const WindowContent = ({
                 >
                   {child.type === "folder" ? (
                     <>
-                      <path
-                        d="M5 10h30v25H5z"
-                        fill="white"
-                        stroke="black"
-                        strokeWidth="2"
-                      />
-                      <path
-                        d="M10 5h20v5H10z"
-                        fill="white"
-                        stroke="black"
-                        strokeWidth="2"
-                      />
+                      <path d="M5 10h30v25H5z" fill="white" stroke="black" strokeWidth="2" />
+                      <path d="M10 5h20v5H10z" fill="white" stroke="black" strokeWidth="2" />
                     </>
                   ) : child.type === "link" ? (
                     <>
@@ -342,11 +292,7 @@ const WindowContent = ({
                         stroke="black"
                         strokeWidth="2"
                       />
-                      <path
-                        d="M15 20h10M20 15l5 5-5 5"
-                        stroke="black"
-                        strokeWidth="2"
-                      />
+                      <path d="M15 20h10M20 15l5 5-5 5" stroke="black" strokeWidth="2" />
                     </>
                   ) : (
                     <>
@@ -374,11 +320,7 @@ const WindowContent = ({
       </>
     );
   } else if (item.type === "file") {
-    return (
-      <div className="font-chicago text-sm whitespace-pre-wrap">
-        {item.content}
-      </div>
-    );
+    return <div className="font-chicago text-sm whitespace-pre-wrap">{item.content}</div>;
   } else if (item.type === "link") {
     return (
       <div className="font-chicago text-sm">
@@ -422,7 +364,7 @@ export function RetroMac() {
       ]);
       setMaxZIndex((prev) => prev + 1);
     },
-    [maxZIndex]
+    [maxZIndex],
   );
 
   const closeWindow = useCallback((id: string) => {
@@ -441,17 +383,12 @@ export function RetroMac() {
       });
       setMaxZIndex((prev) => prev + 1);
     },
-    [maxZIndex]
+    [maxZIndex],
   );
 
-  const updateWindowPosition = useCallback(
-    (id: string, newPosition: { x: number; y: number }) => {
-      setWindows((prev) =>
-        prev.map((w) => (w.id === id ? { ...w, position: newPosition } : w))
-      );
-    },
-    []
-  );
+  const updateWindowPosition = useCallback((id: string, newPosition: { x: number; y: number }) => {
+    setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, position: newPosition } : w)));
+  }, []);
 
   return (
     <div
@@ -476,9 +413,7 @@ export function RetroMac() {
           zIndex={window.zIndex}
           onClose={() => closeWindow(window.id)}
           onFocus={() => focusWindow(window.id)}
-          onDragEnd={(newPosition) =>
-            updateWindowPosition(window.id, newPosition)
-          }
+          onDragEnd={(newPosition) => updateWindowPosition(window.id, newPosition)}
         >
           {window.content}
         </MacWindow>

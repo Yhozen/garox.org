@@ -1,48 +1,43 @@
 {
   "name": "garox-portfolio",
-  "description": "Garox portolio",
   "version": "1.0.0",
-  "author": "Gabriel Pérez <garox.eth@@ethmail.cc>",
-  "dependencies": {
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "dayjs": "^1.11.9",
-    "framer-motion": "^11.13.5",
-    "lucide-react": "^0.468.0",
-    "next": "^16.3.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "swr": "^2.2.0",
-    "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.0",
-    "zustand": "^4.3.9"
-  },
+  "description": "Garox portolio",
   "keywords": [
     "portfolio"
   ],
   "license": "MIT",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "export": "next export",
-    "start": "next start",
-    "predeploy": "next build && next export",
-    "deploy": "gh-pages -d out -b master",
-    "lint": "next lint"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.4"
-  },
+  "author": "Gabriel Pérez <garox.eth@@ethmail.cc>",
   "repository": {
     "type": "git",
     "url": "https://github.com/Yhozen/Yhozen.github.io"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "check": "oxfmt --check && oxlint",
+    "lint": "oxlint",
+    "fmt": "oxfmt"
+  },
+  "dependencies": {
+    "cn": "^0.5.2",
+    "motion": "^14.14.0",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^24",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.93.0",
+    "oxlint-tsgolint": "^7.0.2007",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
