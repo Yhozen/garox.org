@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import { useDesktop } from "./desktop-context";
 
 type MenuItem = { label: string; action?: () => void };
@@ -54,13 +55,14 @@ export function MenuBar() {
   return (
     <nav
       ref={ref}
-      className="bg-white border-b-2 border-black px-2 py-1 flex items-center space-x-4 text-sm font-chicago relative z-50"
+      className="bg-white border-b-2 border-black px-2 pb-1 pt-[max(0.25rem,env(safe-area-inset-top))] max-sm:pb-2 max-sm:pt-[max(0.5rem,env(safe-area-inset-top))] flex items-center space-x-4 text-sm font-chicago relative z-50"
     >
       <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" aria-hidden>
         <path d="M1 1h14v14H1V1zm1 1v12h12V2H2zm2 2h8v8H4V4zm1 1v6h6V5H5z" fill="black" />
       </svg>
       {Object.entries(menus).map(([menu, items]) => (
-        <div key={menu} className="relative">
+        // Only File does anything yet, so phones skip the decorative menus.
+        <div key={menu} className={cn("relative", menu !== "File" && "max-sm:hidden")}>
           <button
             type="button"
             aria-expanded={activeMenu === menu}
@@ -75,7 +77,7 @@ export function MenuBar() {
                 <button
                   type="button"
                   key={item.label}
-                  className="block w-full text-left px-4 py-1 hover:bg-black hover:text-white"
+                  className="block w-full text-left px-4 py-1 max-sm:py-3 hover:bg-black hover:text-white"
                   onClick={() => {
                     item.action?.();
                     setActiveMenu(null);
