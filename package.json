@@ -1,24 +1,23 @@
 {
   "name": "garox-portfolio",
-  "description": "Garox portolio",
   "version": "1.0.0",
-  "author": "Gabriel Pérez <garox.eth@@ethmail.cc>",
-  "license": "MIT",
+  "description": "Garox portolio",
   "keywords": [
     "portfolio"
   ],
+  "license": "MIT",
+  "author": "Gabriel Pérez <garox.eth@@ethmail.cc>",
   "repository": {
     "type": "git",
     "url": "https://github.com/Yhozen/Yhozen.github.io"
-  },
-  "engines": {
-    "node": ">=22"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "check": "oxfmt --check && oxlint",
+    "lint": "oxlint",
+    "fmt": "oxfmt"
   },
   "dependencies": {
     "cn": "^0.5.2",
@@ -32,9 +31,13 @@
     "@types/node": "^24",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "eslint": "^9",
-    "eslint-config-next": "^16.4.6",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.93.0",
+    "oxlint-tsgolint": "^7.0.2007",
     "tailwindcss": "^4.3.5",
-    "typescript": "~6.0.3"
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
