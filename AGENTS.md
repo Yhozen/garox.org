@@ -2,8 +2,8 @@
 
 ## Project conventions
 
-- Use bun. Before committing, run `bun run check` (oxfmt + type-aware oxlint) and `bun run build`.
-- Commits and PR titles follow Conventional Commits. Don't add AI attribution trailers or footers.
+- Before committing, run `bun run check` (oxfmt + type-aware oxlint) and `bun run build`.
+- Commits and PR titles follow Conventional Commits.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
