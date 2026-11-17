@@ -5,6 +5,7 @@ import { load } from "@/apps/reader";
 import { useDesktop, useMode, WIDE_SCREEN } from "./desktop-context";
 import type { FsNode } from "./fs";
 import type { AppId } from "./registry";
+import { cn } from "@/lib/utils";
 
 const frame = "w-10 h-10";
 
@@ -79,10 +80,14 @@ const appIcons: Partial<Record<AppId, () => React.JSX.Element>> = { nowplaying: 
  * A labelled icon that opens its node when clicked, usually as a window
  * (see `open`); the zoom rects start from the glyph.
  */
-export function NodeIcon({ node }: { node: FsNode }) {
-  const { open } = useDesktop();
+export function NodeIcon({ node: icon }: { node: FsNode }) {
+  const { fs, open } = useDesktop();
   const mode = useMode();
   const router = useRouter();
+  // An alias looks like its original, with its name in italics as in System 7.
+  const isAlias = icon.type === "alias";
+  const node = (isAlias && fs.lookup(icon.target)) || icon;
+  if (node.type === "alias") return null;
   const Glyph = (node.type === "app" && appIcons[node.app]) || icons[node.type];
   // Fetch what a click will open while the pointer hovers: the page if it
   // opens fullscreen, or a post's MDX if it opens as a window.
@@ -96,14 +101,16 @@ export function NodeIcon({ node }: { node: FsNode }) {
   return (
     <button
       type="button"
-      data-node={node.path}
+      data-node={icon.path}
       onPointerEnter={prefetch}
       onFocus={prefetch}
-      onClick={(event) => open(node.path, { from: event.currentTarget.querySelector("svg"), mode })}
+      onClick={(event) => open(icon.path, { from: event.currentTarget.querySelector("svg"), mode })}
       className="flex flex-col items-center w-16 mb-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-black"
     >
       <Glyph />
-      <span className="text-xs mt-1 font-chicago text-center">{node.name}</span>
+      <span className={cn("text-xs mt-1 font-chicago text-center", isAlias && "italic")}>
+        {icon.name}
+      </span>
     </button>
   );
 }

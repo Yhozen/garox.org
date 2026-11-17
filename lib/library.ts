@@ -10,7 +10,7 @@ type EntryModule = {
 };
 
 /**
- * Every entry in app/<collection> (posts, thoughts), newest first. An entry
+ * Every entry in app/<collection> (posts, thoughts, ...), newest first. An entry
  * is a folder with a page.mdx, so adding one is adding a file. Synchronous
  * file reads and module imports finish during prerendering, so this runs at
  * build time.
@@ -42,8 +42,8 @@ async function getEntries(collection: Collection): Promise<Entry[]> {
   return entries.toSorted((a, b) => b.published.localeCompare(a.published));
 }
 
-/** Posts and thoughts, for the desktop to list. */
+/** Every collection's entries, for the desktop to list. */
 export async function getLibrary(): Promise<Library> {
-  const [posts, thoughts] = await Promise.all(COLLECTIONS.map(getEntries));
-  return { posts, thoughts };
+  const entries = await Promise.all(COLLECTIONS.map(getEntries));
+  return Object.fromEntries(COLLECTIONS.map((c, i) => [c, entries[i]])) as Library;
 }
