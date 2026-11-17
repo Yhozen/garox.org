@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { FullscreenApp } from "@/apps/fullscreen-app";
 import { cn } from "@/lib/utils";
 import { desktopPages } from "@/lib/pages";
@@ -29,6 +29,8 @@ export default async function Page({ params }: PageProps<"/[...path]">) {
   const { fs } = await nodes();
   const node = fs.lookup(path);
   if (!node) notFound();
+  // An alias's URL is its original's.
+  if (node.type === "alias") redirect(`/${node.target}`);
 
   return (
     <div className="h-full overflow-auto">

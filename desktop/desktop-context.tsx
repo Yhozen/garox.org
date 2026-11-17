@@ -130,9 +130,12 @@ export function DesktopProvider({ library, children }: { library: Library; child
       fs,
       area,
       pending,
-      open(path, { from, mode = "window" } = {}) {
-        const node = fs.lookup(path);
+      open(target, { from, mode = "window" } = {}) {
+        let node = fs.lookup(target);
+        // An alias opens the original: same window, URL and Copy Link.
+        if (node?.type === "alias") node = fs.lookup(node.target);
         if (!node) return;
+        const { path } = node;
         if (node.type === "link") {
           window.open(node.url, "_blank", "noopener,noreferrer");
           return;

@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
   // Posts are listed by reading app/posts. That happens at build time, but
   // crawlers get pages rendered on request, so ship the files too.
-  outputFileTracingIncludes: { "/**": ["./app/posts/*/page.mdx", "./app/thoughts/*/page.mdx"] },
+  outputFileTracingIncludes: { "/**": ["./app/*/*/page.mdx"] },
 };
 
 export default createMDX()(nextConfig);

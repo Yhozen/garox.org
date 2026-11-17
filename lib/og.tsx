@@ -214,7 +214,7 @@ export function card({ heading, text, note }: { heading: string; text?: string; 
 
 /** A post's or thought's preview: its title and description in a window titled after its folder, dated. */
 export function entryImage(
-  folder: "Posts" | "Thoughts",
+  folder: string,
   { title, description }: { title: string; description: string },
   published: string,
 ) {

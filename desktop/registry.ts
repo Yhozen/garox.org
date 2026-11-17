@@ -31,7 +31,7 @@ export const apps = {
 
 export type AppId = keyof typeof apps;
 
-/** Which app opens a node; links have none because they leave the site. */
+/** Which app opens a node; links leave the site and aliases open their target instead. */
 export function appFor(node: FsNode): AppDefinition | null {
   switch (node.type) {
     case "folder":
@@ -43,6 +43,7 @@ export function appFor(node: FsNode): AppDefinition | null {
     case "document":
       return apps.reader;
     case "link":
+    case "alias":
       return null;
   }
 }

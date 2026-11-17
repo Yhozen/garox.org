@@ -1,11 +1,11 @@
 import type { AppId } from "./registry";
 
 /**
- * Posts are longer pieces, thoughts are short ones. Both are MDX:
- * app/<collection>/<slug>/page.mdx exports `metadata` (title, description)
- * and `published`.
+ * Folders whose files are MDX: app/<collection>/<slug>/page.mdx exports
+ * `metadata` (title, description) and `published`. Posts are longer pieces,
+ * thoughts are short ones.
  */
-export const COLLECTIONS = ["posts", "thoughts"] as const;
+export const COLLECTIONS = ["posts", "thoughts", "y-collection", "game-museum"] as const;
 export type Collection = (typeof COLLECTIONS)[number];
 
 export type Entry = { slug: string; title: string; description: string; published: string };
@@ -16,6 +16,8 @@ type Kind =
   | { type: "text"; content: string }
   | { type: "link"; url: string }
   | { type: "app"; app: AppId }
+  /** A System 7 alias: an icon here that opens the node at `target`. */
+  | { type: "alias"; target: string }
   /** A post or thought. Its page is app/<path>/page.mdx. */
   | { type: "document"; published: string; description: string };
 
@@ -45,17 +47,23 @@ const app =
   (slug: string, name: string, id: AppId): Make =>
   (parent) => ({ type: "app", name, path: join(parent, slug), app: id });
 
+const alias =
+  (slug: string, name: string, target: string): Make =>
+  (parent) => ({ type: "alias", name, path: join(parent, slug), target });
+
 const document =
   ({ slug, title, published, description }: Entry): Make =>
   (parent) => ({ type: "document", name: title, path: join(parent, slug), published, description });
 
 /**
  * Builds the desktop. Every node's path is also its URL (`/posts/hello-my-friend`,
- * `/now-playing`). Posts and thoughts come from app/posts and app/thoughts,
+ * `/now-playing`). Collections come from their app/<collection> folders,
  * so the server lists them and hands the same lists to the client to build
  * an identical tree.
  */
-export function createFileSystem({ posts, thoughts }: Library) {
+export function createFileSystem(library: Library) {
+  const collection = (slug: Collection, name: string) =>
+    folder(slug, name, library[slug].map(document));
   const desktopItems: FsNode[] = [
     folder("system-folder", "System Folder", [
       text("system", "System", "System information goes here."),
@@ -63,12 +71,15 @@ export function createFileSystem({ posts, thoughts }: Library) {
       folder("control-panels", "Control Panels", []),
     ]),
     folder("projects", "Projects", [
-      link("project-a", "Project A", "https://example.com/project-a"),
-      link("project-b", "Project B", "https://example.com/project-b"),
-      link("project-c", "Project C", "https://example.com/project-c"),
+      link("reccupera", "Reccupera", "https://reccupera.cl"),
+      link("copte", "Copte", "https://copte.cl"),
+      alias("y-collection", "Y Collection", "y-collection"),
+      alias("game-museum", "Game museum", "game-museum"),
     ]),
-    folder("thoughts", "Thoughts", thoughts.map(document)),
-    folder("posts", "Posts", posts.map(document)),
+    collection("thoughts", "Thoughts"),
+    collection("posts", "Posts"),
+    collection("y-collection", "Y Collection"),
+    collection("game-museum", "Game museum"),
     app("now-playing", "Now Playing", "nowplaying"),
   ].map((make) => make(""));
 
@@ -87,11 +98,11 @@ export function createFileSystem({ posts, thoughts }: Library) {
 
   const lookup = (path: string): FsNode | undefined => index.get(path);
 
-  /** Keeps paths that open a window (links leave the site), without duplicates. */
+  /** Keeps paths that open a window (links leave the site, aliases open their target), without duplicates. */
   const openWindows = (paths: string[]): string[] =>
     paths.filter((path, i) => {
       const node = index.get(path);
-      return node && node.type !== "link" && paths.indexOf(path) === i;
+      return node && node.type !== "link" && node.type !== "alias" && paths.indexOf(path) === i;
     });
 
   return {
