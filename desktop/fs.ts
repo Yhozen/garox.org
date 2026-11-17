@@ -42,7 +42,7 @@ const document =
   (parent) => ({ type: "document", name: title, path: join(parent, slug), published, description });
 
 /**
- * Builds the desktop. Every node's path is also its URL (`/posts/hello-world`,
+ * Builds the desktop. Every node's path is also its URL (`/posts/hello-my-friend`,
  * `/now-playing`). Posts come from app/posts, so the server lists them and
  * hands the same list to the client to build an identical tree.
  */
