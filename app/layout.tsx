@@ -18,8 +18,10 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://garox.org"),
-  title: { default: "Garox.org", template: "%s — Garox.org" },
-  description: "Garox's personal website",
+  title: { default: "Garox.org", template: "%s · Garox.org" },
+  description: "Garox's personal page: posts, things I'm building, and what I'm listening to.",
+  openGraph: { siteName: "Garox.org", type: "website" },
+  twitter: { card: "summary_large_image" },
 };
 
 // `viewport-fit=cover` exposes the safe-area insets used to clear notches.
