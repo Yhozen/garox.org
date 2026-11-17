@@ -12,7 +12,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { createFileSystem, pathFromUrl, type FileSystem, type PostMeta } from "./fs";
+import { createFileSystem, pathFromUrl, type FileSystem, type Library } from "./fs";
 import { desktopUrl, loadWindows, type windowsParam } from "./search-params";
 import { depart, launch } from "./zoom";
 
@@ -35,7 +35,7 @@ type Desktop = {
   pending: boolean;
   /**
    * Opens a node as a window. Anything opened from a fullscreen page opens
-   * fullscreen too, and on phones posts open at their own URL (a window
+   * fullscreen too, and on phones posts and thoughts open at their own URL (a window
    * fills the screen there anyway, and the address bar stays shareable).
    */
   open: (path: string, options?: { from?: Element | null; mode?: Mode }) => void;
@@ -69,8 +69,8 @@ const toFront = (stack: string[], path: string) => [...stack.filter((p) => p !==
  * Actions read `window.location` when they run instead, and the `?w`
  * setter is handed over by the windows layer once it mounts.
  */
-export function DesktopProvider({ posts, children }: { posts: PostMeta[]; children: ReactNode }) {
-  const fs = useMemo(() => createFileSystem(posts), [posts]);
+export function DesktopProvider({ library, children }: { library: Library; children: ReactNode }) {
+  const fs = useMemo(() => createFileSystem(library), [library]);
   const router = useRouter();
   const area = useRef<HTMLElement>(null);
   const setter = useRef<SetWindows | null>(null);

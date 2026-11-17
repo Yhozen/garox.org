@@ -1,14 +1,22 @@
 import type { AppId } from "./registry";
 
-/** A post: app/posts/<slug>/page.mdx exports `metadata` (title, description) and `published`. */
-export type PostMeta = { slug: string; title: string; description: string; published: string };
+/**
+ * Posts are longer pieces, thoughts are short ones. Both are MDX:
+ * app/<collection>/<slug>/page.mdx exports `metadata` (title, description)
+ * and `published`.
+ */
+export const COLLECTIONS = ["posts", "thoughts"] as const;
+export type Collection = (typeof COLLECTIONS)[number];
+
+export type Entry = { slug: string; title: string; description: string; published: string };
+export type Library = Record<Collection, Entry[]>;
 
 type Kind =
   | { type: "folder"; children: FsNode[] }
   | { type: "text"; content: string }
   | { type: "link"; url: string }
   | { type: "app"; app: AppId }
-  /** An MDX post. Its page is app/posts/<slug>/page.mdx. */
+  /** A post or thought. Its page is app/<path>/page.mdx. */
   | { type: "document"; published: string; description: string };
 
 /** Anything that can appear as an icon. `path` doubles as the window id. */
@@ -38,15 +46,16 @@ const app =
   (parent) => ({ type: "app", name, path: join(parent, slug), app: id });
 
 const document =
-  ({ slug, title, published, description }: PostMeta): Make =>
+  ({ slug, title, published, description }: Entry): Make =>
   (parent) => ({ type: "document", name: title, path: join(parent, slug), published, description });
 
 /**
  * Builds the desktop. Every node's path is also its URL (`/posts/hello-my-friend`,
- * `/now-playing`). Posts come from app/posts, so the server lists them and
- * hands the same list to the client to build an identical tree.
+ * `/now-playing`). Posts and thoughts come from app/posts and app/thoughts,
+ * so the server lists them and hands the same lists to the client to build
+ * an identical tree.
  */
-export function createFileSystem(posts: PostMeta[]) {
+export function createFileSystem({ posts, thoughts }: Library) {
   const desktopItems: FsNode[] = [
     folder("system-folder", "System Folder", [
       text("system", "System", "System information goes here."),
@@ -58,10 +67,7 @@ export function createFileSystem(posts: PostMeta[]) {
       link("project-b", "Project B", "https://example.com/project-b"),
       link("project-c", "Project C", "https://example.com/project-c"),
     ]),
-    folder("thoughts", "Thoughts", [
-      text("idea", "idea.txt", "My brilliant idea: a retro-styled portfolio!"),
-      text("notes", "notes.txt", "Remember to add more retro elements."),
-    ]),
+    folder("thoughts", "Thoughts", thoughts.map(document)),
     folder("posts", "Posts", posts.map(document)),
     app("now-playing", "Now Playing", "nowplaying"),
   ].map((make) => make(""));
@@ -96,7 +102,7 @@ export function createFileSystem(posts: PostMeta[]) {
     indexOf: (path: string): number => order.indexOf(path),
     titleFor: (stack: string[]): string => {
       const front = openWindows(stack).at(-1);
-      return front ? `${lookup(front)!.name} — Garox.org` : "Garox.org";
+      return front ? `${lookup(front)!.name} · Garox.org` : "Garox.org";
     },
   };
 }
