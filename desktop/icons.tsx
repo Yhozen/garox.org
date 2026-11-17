@@ -1,3 +1,8 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { load } from "@/apps/reader";
+import { useDesktop, useMode, WIDE_SCREEN } from "./desktop-context";
 import type { FsNode } from "./fs";
 import type { AppId } from "./registry";
 
@@ -51,16 +56,50 @@ function RadioIcon() {
   );
 }
 
-const icons = { folder: FolderIcon, link: LinkIcon, text: TextIcon, app: MacIcon };
+function DocumentIcon() {
+  return (
+    <svg className={frame} viewBox="0 0 40 40" fill="none" aria-hidden>
+      <path d="M9 4h15l7 7v25H9z" fill="white" stroke="black" strokeWidth="2" />
+      <path d="M24 4v7h7" stroke="black" strokeWidth="2" />
+      <path d="M13 17h14M13 22h14M13 27h14M13 32h9" stroke="black" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+const icons = {
+  folder: FolderIcon,
+  link: LinkIcon,
+  text: TextIcon,
+  app: MacIcon,
+  document: DocumentIcon,
+};
 const appIcons: Partial<Record<AppId, () => React.JSX.Element>> = { nowplaying: RadioIcon };
 
-/** A labelled icon that opens its node when clicked. */
-export function NodeIcon({ node, onOpen }: { node: FsNode; onOpen: (path: string) => void }) {
+/**
+ * A labelled icon that opens its node when clicked, usually as a window
+ * (see `open`); the zoom rects start from the glyph.
+ */
+export function NodeIcon({ node }: { node: FsNode }) {
+  const { open } = useDesktop();
+  const mode = useMode();
+  const router = useRouter();
   const Glyph = (node.type === "app" && appIcons[node.app]) || icons[node.type];
+  // Fetch what a click will open while the pointer hovers: the page if it
+  // opens fullscreen, or a post's MDX if it opens as a window.
+  const prefetch = () => {
+    if (node.type === "link") return;
+    const fullscreen =
+      mode === "fullscreen" || (node.type === "document" && !matchMedia(WIDE_SCREEN).matches);
+    if (fullscreen) router.prefetch(`/${node.path}`);
+    else if (node.type === "document") void load(node.path.split("/").at(-1)!);
+  };
   return (
     <button
       type="button"
-      onClick={() => onOpen(node.path)}
+      data-node={node.path}
+      onPointerEnter={prefetch}
+      onFocus={prefetch}
+      onClick={(event) => open(node.path, { from: event.currentTarget.querySelector("svg"), mode })}
       className="flex flex-col items-center w-16 mb-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-black"
     >
       <Glyph />

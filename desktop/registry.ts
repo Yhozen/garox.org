@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 import { About } from "@/apps/about";
 import { Finder } from "@/apps/finder";
 import { NowPlaying } from "@/apps/now-playing";
+import { Reader } from "@/apps/reader";
 import { SimpleText } from "@/apps/simpletext";
 import type { FsNode } from "./fs";
 
@@ -16,6 +17,8 @@ export type AppDefinition = {
   Component: ComponentType<AppProps>;
   /** Default window width in pixels on larger screens. */
   width: number;
+  /** Maximum content height in pixels on larger screens (default 400). */
+  height?: number;
 };
 
 export const apps = {
@@ -23,6 +26,7 @@ export const apps = {
   simpletext: { Component: SimpleText, width: 360 },
   about: { Component: About, width: 340 },
   nowplaying: { Component: NowPlaying, width: 260 },
+  reader: { Component: Reader, width: 480, height: 520 },
 } satisfies Record<string, AppDefinition>;
 
 export type AppId = keyof typeof apps;
@@ -36,6 +40,8 @@ export function appFor(node: FsNode): AppDefinition | null {
       return apps.simpletext;
     case "app":
       return apps[node.app];
+    case "document":
+      return apps.reader;
     case "link":
       return null;
   }

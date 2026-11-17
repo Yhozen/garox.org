@@ -1,10 +1,15 @@
 import type { AppId } from "./registry";
 
+/** A post: app/posts/<slug>/page.mdx exports `metadata` (title, description) and `published`. */
+export type PostMeta = { slug: string; title: string; description: string; published: string };
+
 type Kind =
   | { type: "folder"; children: FsNode[] }
   | { type: "text"; content: string }
   | { type: "link"; url: string }
-  | { type: "app"; app: AppId };
+  | { type: "app"; app: AppId }
+  /** An MDX post. Its page is app/posts/<slug>/page.mdx. */
+  | { type: "document"; published: string; description: string };
 
 /** Anything that can appear as an icon. `path` doubles as the window id. */
 export type FsNode = { name: string; path: string } & Kind;
@@ -32,50 +37,74 @@ const app =
   (slug: string, name: string, id: AppId): Make =>
   (parent) => ({ type: "app", name, path: join(parent, slug), app: id });
 
-/** Icons laid out on the desktop. */
-export const desktopItems: FsNode[] = [
-  folder("system-folder", "System Folder", [
-    text("system", "System", "System information goes here."),
-    text("finder", "Finder", "Finder details go here."),
-    folder("control-panels", "Control Panels", []),
-  ]),
-  folder("projects", "Projects", [
-    link("project-a", "Project A", "https://example.com/project-a"),
-    link("project-b", "Project B", "https://example.com/project-b"),
-    link("project-c", "Project C", "https://example.com/project-c"),
-  ]),
-  folder("thoughts", "Thoughts", [
-    text("idea", "idea.txt", "My brilliant idea: a retro-styled portfolio!"),
-    text("notes", "notes.txt", "Remember to add more retro elements."),
-  ]),
-  folder("posts", "Posts", [
-    text("post1", "post1.txt", "My first blog post content."),
-    text("post2", "post2.txt", "My second blog post content."),
-    text("post3", "post3.txt", "My third blog post content."),
-  ]),
-  app("now-playing", "Now Playing", "nowplaying"),
-].map((make) => make(""));
+const document =
+  ({ slug, title, published, description }: PostMeta): Make =>
+  (parent) => ({ type: "document", name: title, path: join(parent, slug), published, description });
 
-/** The About This Mac icon, pinned to the bottom-right corner. */
-export const aboutItem: FsNode = app("about", "About This Mac", "about")("");
+/**
+ * Builds the desktop. Every node's path is also its URL (`/posts/hello-my-friend`,
+ * `/now-playing`). Posts come from app/posts, so the server lists them and
+ * hands the same list to the client to build an identical tree.
+ */
+export function createFileSystem(posts: PostMeta[]) {
+  const desktopItems: FsNode[] = [
+    folder("system-folder", "System Folder", [
+      text("system", "System", "System information goes here."),
+      text("finder", "Finder", "Finder details go here."),
+      folder("control-panels", "Control Panels", []),
+    ]),
+    folder("projects", "Projects", [
+      link("project-a", "Project A", "https://example.com/project-a"),
+      link("project-b", "Project B", "https://example.com/project-b"),
+      link("project-c", "Project C", "https://example.com/project-c"),
+    ]),
+    folder("thoughts", "Thoughts", [
+      text("idea", "idea.txt", "My brilliant idea: a retro-styled portfolio!"),
+      text("notes", "notes.txt", "Remember to add more retro elements."),
+    ]),
+    folder("posts", "Posts", posts.map(document)),
+    app("now-playing", "Now Playing", "nowplaying"),
+  ].map((make) => make(""));
 
-const index = new Map<string, FsNode>();
-const visit = (node: FsNode) => {
-  index.set(node.path, node);
-  if (node.type === "folder") node.children.forEach(visit);
-};
-[...desktopItems, aboutItem].forEach(visit);
+  /** The About This Mac icon, pinned to the bottom-right corner. */
+  const aboutItem: FsNode = app("about", "About This Mac", "about")("");
 
-/** Every node in depth-first order, used to stagger default window positions. */
-const order = [...index.keys()];
+  const index = new Map<string, FsNode>();
+  const visit = (node: FsNode) => {
+    index.set(node.path, node);
+    if (node.type === "folder") node.children.forEach(visit);
+  };
+  [...desktopItems, aboutItem].forEach(visit);
 
-export const lookup = (path: string): FsNode | undefined => index.get(path);
+  /** Every node in depth-first order, used to stagger default window positions. */
+  const order = [...index.keys()];
 
-export const indexOf = (path: string): number => order.indexOf(path);
+  const lookup = (path: string): FsNode | undefined => index.get(path);
 
-/** Keeps paths that open a window (links leave the site), without duplicates. */
-export const openWindows = (paths: string[]): string[] =>
-  paths.filter((path, i) => {
-    const node = index.get(path);
-    return node && node.type !== "link" && paths.indexOf(path) === i;
-  });
+  /** Keeps paths that open a window (links leave the site), without duplicates. */
+  const openWindows = (paths: string[]): string[] =>
+    paths.filter((path, i) => {
+      const node = index.get(path);
+      return node && node.type !== "link" && paths.indexOf(path) === i;
+    });
+
+  return {
+    desktopItems,
+    aboutItem,
+    lookup,
+    openWindows,
+    indexOf: (path: string): number => order.indexOf(path),
+    titleFor: (stack: string[]): string => {
+      const front = openWindows(stack).at(-1);
+      return front ? `${lookup(front)!.name} — Garox.org` : "Garox.org";
+    },
+  };
+}
+
+export type FileSystem = ReturnType<typeof createFileSystem>;
+
+/** Every node opens fullscreen at its own path, so that is the link to share. */
+export const shareUrl = (node: FsNode): string => `/${node.path}`;
+
+/** The node path a URL pathname shows fullscreen ("" for the bare desktop). */
+export const pathFromUrl = (pathname: string): string => decodeURIComponent(pathname.slice(1));

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Desktop } from "@/desktop/desktop";
+import { getPosts } from "@/lib/posts";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -15,14 +17,19 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Garox.org",
+  metadataBase: new URL("https://garox.org"),
+  title: { default: "Garox.org", template: "%s — Garox.org" },
   description: "Garox's personal website",
 };
 
 // `viewport-fit=cover` exposes the safe-area insets used to clear notches.
 export const viewport: Viewport = { viewportFit: "cover", themeColor: "#ffffff" };
 
-export default function RootLayout({
+/**
+ * The desktop lives here, so it persists while pages change. Each page is
+ * whatever's fullscreen on top of it; `/` is the bare desktop.
+ */
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -30,7 +37,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <NuqsAdapter>
+          <Desktop posts={await getPosts()}>{children}</Desktop>
+        </NuqsAdapter>
       </body>
     </html>
   );
