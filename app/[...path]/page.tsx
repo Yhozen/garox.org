@@ -1,23 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FullscreenApp } from "@/apps/fullscreen-app";
-import { createFileSystem, type FsNode } from "@/desktop/fs";
 import { cn } from "@/lib/utils";
-import { getPosts } from "@/lib/posts";
+import { desktopPages } from "@/lib/pages";
 
 /**
- * Every folder, text file and app on the desktop has a URL — `/thoughts`,
- * `/thoughts/idea`, `/now-playing` — which shows it fullscreen. Posts have
- * their own pages in app/posts; links leave the site.
+ * Every folder, text file and app on the desktop has a URL (`/thoughts`,
+ * `/thoughts/idea`, `/now-playing`) which shows it fullscreen.
  */
-const walk = (node: FsNode): FsNode[] =>
-  node.type === "folder" ? [node, ...node.children.flatMap(walk)] : [node];
-
-async function nodes() {
-  const fs = createFileSystem(await getPosts());
-  const all = [...fs.desktopItems, fs.aboutItem].flatMap(walk);
-  return { fs, pages: all.filter((node) => node.type !== "link" && node.type !== "document") };
-}
+const nodes = desktopPages;
 
 export async function generateStaticParams() {
   const { pages } = await nodes();
@@ -27,7 +18,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[...path]">): Promise<Metadata> {
   const { fs } = await nodes();
   const node = fs.lookup((await params).path.join("/"));
-  return node ? { title: node.name } : {};
+  if (!node) return {};
+  // A catch-all can't hold an opengraph-image file, so its previews come from /og.
+  const image = { url: `/og/${node.path}`, width: 1200, height: 630, alt: node.name };
+  return { title: node.name, openGraph: { siteName: "Garox.org", images: [image] } };
 }
 
 export default async function Page({ params }: PageProps<"/[...path]">) {

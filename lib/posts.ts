@@ -23,6 +23,13 @@ export async function getPosts(): Promise<PostMeta[]> {
     )
     .map((entry) => entry.name);
 
+  // Every post shares with its own preview card; see app/posts/hello-my-friend.
+  for (const slug of slugs) {
+    if (!fs.existsSync(path.join(root, slug, "opengraph-image.tsx"))) {
+      throw new Error(`app/posts/${slug} needs an opengraph-image.tsx for its link preview`);
+    }
+  }
+
   const posts = await Promise.all(
     slugs.map(async (slug) => {
       const post = (await import(`@/app/posts/${slug}/page.mdx`)) as PostModule;
