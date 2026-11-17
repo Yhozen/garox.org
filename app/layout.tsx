@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Desktop } from "@/desktop/desktop";
-import { getPosts } from "@/lib/posts";
+import { getLibrary } from "@/lib/library";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -40,7 +40,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NuqsAdapter>
-          <Desktop posts={await getPosts()}>{children}</Desktop>
+          <Desktop library={await getLibrary()}>{children}</Desktop>
         </NuqsAdapter>
       </body>
     </html>

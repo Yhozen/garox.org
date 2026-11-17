@@ -12,7 +12,7 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 import { DesktopProvider, useDesktop } from "./desktop-context";
-import { pathFromUrl, type PostMeta } from "./fs";
+import { pathFromUrl, type Library } from "./fs";
 import { Fullscreen } from "./fullscreen";
 import { NodeIcon } from "./icons";
 import { MenuBar } from "./menu-bar";
@@ -103,9 +103,9 @@ function Screen({ children }: { children: ReactNode }) {
 }
 
 /** The whole desktop. Lives in the root layout, so it persists across pages. */
-export function Desktop({ posts, children }: { posts: PostMeta[]; children: ReactNode }) {
+export function Desktop({ library, children }: { library: Library; children: ReactNode }) {
   return (
-    <DesktopProvider posts={posts}>
+    <DesktopProvider library={library}>
       <Screen>{children}</Screen>
     </DesktopProvider>
   );

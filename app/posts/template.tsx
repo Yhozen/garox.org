@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { CurrentPostFooter } from "@/apps/post-footer";
 
 /**
- * A post, fullscreen: a readable column with its date and a share button.
+ * A post (or thought), fullscreen: a readable column with its date and a share button.
  * A template rather than a layout, so each post gets its own scroll
  * container — new posts open at the top, and Back (which keeps the previous
  * page alive) returns to where you were reading.

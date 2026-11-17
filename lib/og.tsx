@@ -212,8 +212,9 @@ export function card({ heading, text, note }: { heading: string; text?: string; 
   );
 }
 
-/** A post's preview: its title and description in a window, dated. */
-export function postImage(
+/** A post's or thought's preview: its title and description in a window titled after its folder, dated. */
+export function entryImage(
+  folder: "Posts" | "Thoughts",
   { title, description }: { title: string; description: string },
   published: string,
 ) {
@@ -222,7 +223,7 @@ export function postImage(
     timeZone: "UTC",
   });
   return desktopImage({
-    title: "Posts",
+    title: folder,
     children: card({ heading: title, text: description, note: date }),
   });
 }

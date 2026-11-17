@@ -91,7 +91,7 @@ export function NodeIcon({ node }: { node: FsNode }) {
     const fullscreen =
       mode === "fullscreen" || (node.type === "document" && !matchMedia(WIDE_SCREEN).matches);
     if (fullscreen) router.prefetch(`/${node.path}`);
-    else if (node.type === "document") void load(node.path.split("/").at(-1)!);
+    else if (node.type === "document") void load(node.path);
   };
   return (
     <button
